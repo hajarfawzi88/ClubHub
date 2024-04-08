@@ -85,7 +85,7 @@ Go to `http://127.0.0.1:5000`
    b. As a SOC/SA representative (Admin):
       - Enter your email
       - Enter your Password
-      - 
+
 3. Admin sees all clubs and members
    - Log in with credentials as an admin
    - View clubs
