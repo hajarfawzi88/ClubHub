@@ -18,8 +18,6 @@ ClubHub provides an online platform to organize the clubs in the universities. T
 
 [Acknowledgements](https://github.com/hajarfawzi88/ClubHub/edit/main/README.md#acknowledgements)
 
-[License](https://github.com/hajarfawzi88/ClubHub/edit/main/README.md#license-)
-
 [Contact](https://github.com/hajarfawzi88/ClubHub/edit/main/README.md#contact)
 
 ## Installation
