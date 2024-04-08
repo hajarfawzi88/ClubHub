@@ -97,6 +97,7 @@ Go to `http://127.0.0.1:5000`
    - click confirm
     
 5. Product:
+   
    a. As a SOC/SA representative (Admin):
       - Login with designated credentials.
       - Views a list of all registered clubs.
@@ -105,7 +106,7 @@ Go to `http://127.0.0.1:5000`
       - Assigns or removes the role of club president.
 
 
-6. User updates information:
+7. User updates information:
     - Enter the first name
     - Enter the Last name
     - Enter your email
