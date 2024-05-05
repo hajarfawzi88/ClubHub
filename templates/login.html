@@ -1,0 +1,162 @@
+<!-- login credintials 
+username: 12345678
+password: 1120sMall@
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+  </head>
+  <body>
+    <div class="login-container">
+      <h1>Welcome Back</h1>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Enter your username"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter your password"
+          />
+        </div>
+        <div class="form-group">
+          <input type="checkbox" id="remember-me" />
+          <label for="remember-me">Remember Me</label>
+        </div>
+        <button type="submit">Login</button>
+        <a href="#">Forgot Password?</a>
+      </form>
+    </div>
+  </body>
+</html>
+<style>
+  body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+  }
+
+  .login-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 400px;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+
+  input[type="checkbox"] {
+    margin-right: 5px;
+  }
+
+  button[type="submit"] {
+    border-color: #0000001a;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #00000080;
+    color: #fff;
+  }
+
+  a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #aaaaaa;
+  }
+</style>
+<script>
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+
+  usernameInput.addEventListener("focus", () => {
+    if (usernameInput.value === "Enter your username") {
+      usernameInput.value = "";
+    }
+  });
+
+  passwordInput.addEventListener("focus", () => {
+    if (passwordInput.value === "Enter your password") {
+      usernameInput.value = "";
+      passwordInput.type = "password"; // Change input type to password on focus
+    }
+  });
+
+  const loginForm = document.getElementById("login-form");
+  loginForm.addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent default form submission
+
+    // Here you would add logic to validate username and password (e.g., send data to server)
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    if (username === "" || password === "") {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    // Simulate sending data to server (replace with your backend interaction)
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username: username, password: password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // Login successful, redirect or display success message
+          alert("Login successful!");
+          // Replace with your redirection logic (e.g., window.location.href = '/home')
+        } else {
+          // Login failed, display error message
+          alert(data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error logging in:", error);
+        alert("An error occurred. Please try again later.");
+      });
+  });
+</script>
