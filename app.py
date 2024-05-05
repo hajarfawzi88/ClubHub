@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask , render_template,url_for,request
+from math import sin,cos,tan,sqrt,pow
 import bcrypt  # Secure hashing library
 from flask_sqlalchemy import SQLAlchemy
-# Flask app setup
-app = Flask(__name__)
 
-# Configure database (replace with your connection details)
+app=Flask(__name__)
+
+#creating sama's database:
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Example using SQLite
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -36,11 +37,58 @@ class User(db.Model):
 # Create database tables (assuming models are defined)
 with app.app_context():
     db.create_all()
-# Signup form route
-@app.route('/signup', methods=['GET', 'POST'])
+
+
+####################################################################################
+####################################################################################
+####################################################################################
+
+
+
+
+
+
+
+
+##creating roots=links=URL
+#main route
+@app.route("/")
+
+def main():
+    return render_template("app.html")
+
+@app.route("/contacts")
+def contacts():
+    return render_template("contacts.html")
+
+
+
+@app.route("/service")
+def service():
+    return render_template("service.html")
+
+@app.route("/About")
+def About():
+    return render_template("About.html")
+
+
+
+@app.route("/cart")
+def cart():
+    return render_template("cart.html") 
+
+
+##Samas code:
+############################
+############################
+############################
+############################
+############################
+############################
+@app.route('/Signup', methods=['GET', 'POST'])
 def signup():
   if request.method == 'GET':
-    return render_template('signup/Signup.html')  # Render signup form template
+    return render_template('Signup.html')  # Render signup form template
 
   elif request.method == 'POST':
    # In your signup function
@@ -53,15 +101,15 @@ def signup():
 
     # Basic validation
     if not email or not username or not password or not confirm_password:
-      return render_template('signup/Signup.html', error="Please fill out all fields.")
+      return render_template('Signup.html', error="Please fill out all fields.")
     if password != confirm_password:
-      return render_template('signup/Signup.html', error="Passwords do not match.")
+      return render_template('Signup.html', error="Passwords do not match.")
 
     # Check for existing user (assuming User model)
     existing_user = User.query.filter_by(username=username).filter_by(email=email).first()
 
     if existing_user:
-      return render_template('signup/Signup.html', error="Username or email already exists.")
+      return render_template('Signup.html', error="Username or email already exists.")
 
     # # Create new user object (assuming User model)
     new_user = User(email, username, password, account_type)
@@ -75,6 +123,12 @@ def signup():
 
   return 'Something went wrong.'  # Handle unexpected cases
 
-# Run the Flask app (modify host and port if needed)
-if __name__ == '__main__':
-  app.run(debug=True, host='localhost', port=5000)
+############################
+############################
+############################
+############################
+############################
+############################
+
+if __name__=="__main__":
+    app.run(debug=True)

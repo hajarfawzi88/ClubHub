@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="static/CSS/signup/Signup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="title-wrapper">
+        <div class="title">Clubs Organizer Sign Up</div>
+      </div>
+      <div class="div">Email Address</div>
+      <div class="textfield-wrapper">
+        <input
+          class="textfield"
+          placeholder="Enter your email"
+          type="text"
+          name="email"
+        />
+      </div>
+      <div class="div">Username</div>
+      <div class="textfield-wrapper">
+        <input
+          class="textfield"
+          placeholder="Username"
+          type="text"
+          name="username"
+        />
+      </div>
+      <div class="div">Password</div>
+      <div class="textfield-wrapper">
+        <input
+          class="textfield"
+          placeholder="Enter your password"
+          name="password"
+        />
+      </div>
+      <div class="input">
+        <div class="text-wrapper">Confirm Password</div>
+        <input
+          class="textfield"
+          placeholder="Enter your password"
+          name="confirm_password"
+        />
+        <p class="info">
+          Password must be at least 8 characters long and include a mix of
+          uppercase, lowercase letters, numbers, and symbols
+        </p>
+      </div>
+      <div class="selection">
+        <div class="text-wrapper">Account Type</div>
+        <div class="chip-group">
+          <label for="student">
+            <input
+              type="radio"
+              id="student"
+              name="account_type"
+              value="student"
+              class="chip"
+            />
+            <div class="text-2">Student</div>
+          </label>
+          <label for="club_manager">
+            <input
+              type="radio"
+              id="club_manager"
+              name="account_type"
+              value="club_manager"
+              class="chip"
+            />
+            <div class="text-2">Club Manager</div>
+          </label>
+          <label for="supervisor">
+            <input
+              type="radio"
+              id="supervisor"
+              name="account_type"
+              value="supervisor"
+              class="chip"
+            />
+            <div class="text-2">Supervisor</div>
+          </label>
+        </div>
+      </div>
+      <button class="button">
+        <div class="primary"><div class="title-2">Sign Up</div></div>
+      </button>
+    </div>
+  </body>
+  <script>
+    const signupButton = document.querySelector(".button");
+    const chipGroup = document.querySelector(".chip-group");
+
+    signupButton.addEventListener("click", (event) => {
+      event.preventDefault(); // Prevent default form submission
+
+      const emailInput = document.querySelector('input[name="email"]');
+      const usernameInput = document.querySelector('input[name="username"]');
+      const passwordInput = document.querySelector('input[name="password"]');
+      const confirmPasswordInput = document.querySelector(
+        'input[name="confirm_password"]'
+      );
+
+      // Get the selected radio button element
+      const selectedChip = chipGroup.querySelector(
+        'input[type="radio"]:checked'
+      );
+
+      // Validation logic and error messages
+      let isValid = true;
+      const errorMessages = [];
+
+      // Email validation
+      if (!isValidEmail(emailInput.value)) {
+        isValid = false;
+        errorMessages.push("Please enter a valid email address.");
+      }
+
+      // Username validation (simple example, you can adjust complexity)
+      if (usernameInput.value.length < 6) {
+        isValid = false;
+        errorMessages.push("Username must be at least 6 characters long.");
+      }
+
+      // Password validation
+      if (!isValidPassword(passwordInput.value)) {
+        isValid = false;
+        errorMessages.push(
+          "Password must be at least 8 characters long and include a mix of uppercase, lowercase letters, numbers, and symbols."
+        );
+        // } else if (passwordInput.value !== confirmPasswordInput.value) {
+        //   isValid = false;
+        //   errorMessages.push("Passwords do not match.");
+      }
+
+      // Check if selectedChip exists (optional, can be improved)
+      if (!selectedChip) {
+        isValid = false;
+        errorMessages.push("Please select an account type.");
+      }
+
+      // Display error messages or submit form
+      if (isValid) {
+        const accountType = selectedChip.value;
+        const formData = {
+          email: emailInput.value,
+          username: usernameInput.value,
+          password: passwordInput.value,
+          confirm_password: confirmPasswordInput.value,
+          account_type: accountType,
+        };
+        // Replace '/register' with your actual route for form submission
+        fetch("/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Sending data as JSON
+          },
+          body: JSON.stringify(formData), // Convert form data to JSON string
+        })
+          .then((data) => console.log("Success!"))
+          .catch((error) => console.log(error));
+      } else {
+        // Display error messages to the user
+        alert(errorMessages.join("\n")); // Combine error messages with newlines
+      }
+    });
+
+    // Function to validate email format (basic example)
+    function isValidEmail(email) {
+      const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      return emailRegex.test(email);
+    }
+
+    // Function to validate password format (basic example)
+    function isValidPassword(password) {
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      return passwordRegex.test(password);
+    }
+  </script>
+</html>
