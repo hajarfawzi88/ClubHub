@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clubs Organizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+        }
+        .header {
+            background-color: #30b7cf;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+        .search-bar input {
+            padding: 8px;
+            margin-right: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info span {
+            margin-right: 10px;
+        }
+        .main-content {
+            padding: 20px;
+            background: #ffffff;
+            margin-top: 20px;
+        }
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+        .button {
+            display: inline-block;
+            padding: 20px 30px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 100px;
+        }
+        .featured-clubs, .discover-clubs {
+            flex: 1;
+            margin: 100px;
+        }
+        .clubs-cards {
+            display: flex;
+            flex: 2;
+            justify-content: space-around;
+        }
+        .card {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 30%;
+            margin: 10px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="header">
+        <h1>Clubs Organizer</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Discover Clubs">
+            <button>Search</button>
+        </div>
+        <div class="user-info">
+            <span>John Doe</span>
+            <button>Logout</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="welcome-section">
+            <h1>Welcome! Explore Clubs</h1>
+            <p>Find clubs based on your interests</p>
+            <a href="#" class="button">Join a Club</a>
+        </div>
+
+        <div class="row">
+            <div class="featured-clubs">
+                <h2>Featured Clubs</h2>
+                <p>Check out what's hot</p>
+                <a href="#" class="button">View All Clubs</a>
+            </div>
+            <div class="clubs-cards">
+                <div class="card">
+                    <h3>Club A</h3>
+                    <p>Description A</p>
+                </div>
+                <div class="card">
+                    <h3>Club B</h3>
+                    <p>Description B</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="clubs-cards">
+                <div class="card">
+                    <h3>Club c</h3>
+                    <p>Description c</p>
+                </div>
+                <div class="card">
+                    <h3>Club D</h3>
+                    <p>Description D</p>
+                </div>
+            </div>
+            <div class="featured-clubs">
+                <h2>Discover Clubs</h2>
+                <p>Explore a variety of clubs</p>
+                <a href="#" class="button">See More</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Clubs Organizer - All rights reserved</p>
+    </footer>
+</body>
+</html>

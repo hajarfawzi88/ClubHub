@@ -72,14 +72,20 @@ def About():
     return render_template("About.html")
 
 
+@app.route("/olduser")
+def olduser():
+    return render_template("olduser.html")
+@app.route("/newclub")
+def newclub():
+    return render_template("newclub.html")
 
-@app.route("/cart")
-def cart():
-    return render_template("cart.html") 
+@app.route("/student")
+def student():
+    return render_template("student.html")
 
-
-
-
+@app.route("/Clubs")
+def Clubs():
+    return render_template("Clubs.html")
 ##Samas code:
 ############################
 ############################
