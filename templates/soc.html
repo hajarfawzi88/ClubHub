@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Management System</title>
+    <style>
+        body, h1, h2, h3, p, div {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        .navbar {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .logo img {
+            width: 30px; /* Example size */
+            height: 30px;
+            margin-right: 10px;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .navbar .edit-button {
+            padding: 8px 16px;
+            background: none;
+            border: 2px solid white;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: auto;
+            background-color: #000000;
+            padding-top: 40px;
+        }
+        .main {
+            width: 100%;
+            padding: 10px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .event-management, .club-requests, .club-activity {
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 100px;
+        }
+        .events, .requests {
+            display: flex;
+            justify-content: space-between;
+        }
+        .event, .request {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 49%;
+        }
+        .statistics {
+            display: flex;
+            justify-content: space-between;
+        }
+        .stat {
+            text-align: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            flex-basis: 100px;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="ClubHub Logo">
+            <h1>ClubHub</h1>
+        </div>
+        <button class="edit-button">Edit Club Info</button>
+    </div>
+    
+    <div class="container">
+        <div class="main">
+            <div class="event-management section">
+                <h2>Event Management</h2>
+                <a href="#" class="button">Review</a>
+                <div class="events">
+                    <div class="event">
+                        <p>Event 1</p>
+                        <p>Location: Main Hall</p>
+                    </div>
+                    <div class="event">
+                        <p>Event 2</p>
+                        <p>Location: Club Room</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="club-requests section">
+                <h2>Club Requests</h2>
+                <a href="#" class="button">Review</a>
+                <div class="requests">
+                    <div class="request">
+                        <p>Pending Request 1</p>
+                        <p>A new event needs approval</p>
+                    </div>
+                    <div class="request">
+                        <p>Pending Request 2</p>
+                        <p>Content of event #332 needs approval</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="club-activity section">
+                <h2>Club Activity</h2>
+                <div class="statistics">
+                    <div class="stat">
+                        <h3>Members</h3>
+                        <p>25</p>
+                    </div>
+                    <div class="stat">
+                        <h3>Events</h3>
+                        <p>10</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            © 2022 Club Management System. All Rights Reserved.
+        </footer>
+    </div>
+</body>
+</html>

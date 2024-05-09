@@ -324,6 +324,7 @@
       <div class="div">Email Address</div>
       <div class="textfield-wrapper">
         <input
+        
           class="textfield"
           placeholder="Enter your email"
           type="text"
@@ -333,27 +334,25 @@
       <div class="div">Username</div>
       <div class="textfield-wrapper">
         <input
+        id="username"
           class="textfield"
           placeholder="Username"
           type="text"
           name="username"
+          autocomplete="off"
         />
       </div>
       <div class="div">Password</div>
       <div class="textfield-wrapper">
-        <input
-          class="textfield"
-          placeholder="Enter your password"
-          name="password"
-        />
+        <input id="password" class="textfield" type="password" placeholder="Enter your password" name="password" autocomplete="off"/>
+        <button type="button" onclick="togglePasswordVisibility()" class="toggle-password">Show</button>
+    
       </div>
       <div class="input">
         <div class="text-wrapper">Confirm Password</div>
-        <input
-          class="textfield"
-          placeholder="Enter your password"
-          name="confirm_password"
-        />
+        <input id="password" class="textfield" type="password" placeholder="Enter your password" name="password" autocomplete="off"/>
+        <button type="button" onclick="toggleConfirmPasswordVisibility()" class="toggle-password">Show</button>
+    
         <p class="info">
           Password must be at least 8 characters long and include a mix of
           uppercase, lowercase letters, numbers, and symbols
@@ -405,9 +404,13 @@
 
   
   <script>
+
     const signupButton = document.querySelector(".button");
     const chipGroup = document.querySelector(".chip-group");
-
+    window.onload = function() {
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+}
     function togglePasswordVisibility() {
       var passwordInput = document.getElementById("password");
       var toggleButton = document.querySelector(".toggle-password");
@@ -419,6 +422,17 @@
         toggleButton.textContent = "Show";
       }
     }
+    function toggleConfirmPasswordVisibility() {
+    var confirmPasswordInput = document.getElementById("confirm_password");
+    var toggleButton = confirmPasswordInput.nextElementSibling;  // Assumes button is next to the input
+    if (confirmPasswordInput.type === "password") {
+        confirmPasswordInput.type = "text";
+        toggleButton.textContent = "Hide";
+    } else {
+        confirmPasswordInput.type = "password";
+        toggleButton.textContent = "Show";
+    }
+}
 
     signupButton.addEventListener("click", (event) => {
       event.preventDefault(); // Prevent default form submission

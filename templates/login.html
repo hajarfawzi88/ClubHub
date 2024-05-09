@@ -156,6 +156,7 @@ label {
             name="username"
             id="username"
             placeholder="Enter your username"
+            autocomplete="off"
           />
         </div>
         <div class="form-group">
@@ -165,6 +166,7 @@ label {
             name="password"
             id="password"
             placeholder="Enter your password"
+            autocomplete="off"
           />
         </div>
         <div class="form-group">
@@ -183,6 +185,40 @@ label {
 
 
   <script>
+    window.onload = function() {
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+}
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
 
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({username: username, password: password})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirect based on the account type
+                if (data.account_type === 'student') {
+                    window.location.href = 'olduser'; // Redirect to student page
+                } else {
+                    alert('Login successful, but access to the student page is restricted.');
+                }
+            } else {
+                alert(data.message); // Show error message
+            }
+        })
+        .catch(error => {
+            console.error('Login failed:', error);
+            alert('Login failed due to an error: ' + error.message);
+        });
+    });
   </script>
 </html>

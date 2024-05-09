@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body, h1, h2, h3, p {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            width: 100%;
+
+            background-color: #f4f4f4;
+            padding: 40px 0px;
+            text-align: center;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+        }
+        .navbar button {
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .container {
+            width: 95%;
+            max-width: 600px;
+            margin: auto;
+            overflow: hidden;
+        }
+        .profile, .interests, .club-info, .club-management {
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        .profile h1, .interests h2, .club-info h2, .club-management h2 {
+            color: #333;
+        }
+        .interests div, .club-info div {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <img src="logo.png" alt="Logo" style="width: 30px; height: 30px;">
+            ClubHub
+        </div>
+        <button>Edit Club Information</button>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Welcome, User123</h1>
+            <p>Edit your profile information below</p>
+            <input type="text" placeholder="Enter your information">
+            <button>Save Changes</button>
+        </header>
+
+        <div class="interests">
+            <h2>Interests</h2>
+            <div><img src="star.png" alt="Outdoor Activities" style="width: 50px; height: 50px;">Outdoor Activities</div>
+            <div><img src="star.png" alt="Photography" style="width: 50px; height: 50px;">Photography</div>
+        </div>
+
+        <div class="club-info">
+            <h2>Club Memberships</h2>
+            <div>
+                <img src="users.png" alt="Club A" style="width: 50px; height: 50px;">
+                Club A - Member
+            </div>
+            <div>
+                <img src="users.png" alt="Club B" style="width: 50px; height: 50px;">
+                Club B - Leader
+            </div>
+        </div>
+
+        <div class="club-management">
+            <h2>Club Management</h2>
+            <div>
+                <p>Edit Club Information</p>
+                <input type="text" placeholder="Enter Club Name">
+                <input type="text" placeholder="Add Club Description">
+                <button>Save Changes</button>
+            </div>
+            <div>
+                <p>Manage Club Members</p>
+                <input type="text" placeholder="Search for Club Member">
+                <select>
+                    <option value="member">Member</option>
+                    <option value="leader">Leader</option>
+                </select>
+                <button>Assign Role</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        © 2022 User Profile. All Rights Reserved.
+    </footer>
+</body>
+</html>
