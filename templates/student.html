@@ -43,8 +43,9 @@
         }
         .welcome-section {
             text-align: center;
-            margin-bottom: 100px;
-        }
+            margin-bottom: 200px;
+            margin-top: 200px;
+        }   
         .button {
             display: inline-block;
             padding: 20px 30px;
@@ -84,6 +85,7 @@
     </style>
 </head>
 <body>
+
     
     <div class="header">
         <h1>Clubs Organizer</h1>
@@ -92,56 +94,39 @@
             <button>Search</button>
         </div>
         <div class="user-info">
-            <span>John Doe</span>
+            <span class="navbar-text">
+                {{ user.username if user else 'Guest' }}
+            </span>
             <button id="view-clubs-button"class="btn btn-primary">View Clubs Joined</button> <!-- New Button -->
             <button id="logout-button"class="btn btn-primary">Logout</button>
         </div>
     </div>
     
 
+  
     <div class="main-content">
         <div class="welcome-section">
             <h1>Welcome! Explore Clubs</h1>
             <p>Find clubs based on your interests</p>
-            <a href="#" class="button">Join a Club</a>
         </div>
 
-        <div class="row">
-            <div class="featured-clubs">
-                <h2>Featured Clubs</h2>
-                <p>Check out what's hot</p>
-                <a href="#" class="button">View All Clubs</a>
-            </div>
-            <div class="clubs-cards">
-                <div class="card">
-                    <h3>Club A</h3>
-                    <p>Description A</p>
-                </div>
-                <div class="card">
-                    <h3>Club B</h3>
-                    <p>Description B</p>
-                </div>
-            </div>
-        </div>
+
 
         <div class="row">
 
             <div class="clubs-cards">
+                
+                {% for club in clubs %}
                 <div class="card">
-                    <h3>Club c</h3>
-                    <p>Description c</p>
+                    <h3>{{ club.name }}</h3>
+                    <p>{{ club.description }}</p>
+                    <button class="btn btn-primary view-club-details" data-club-id="{{ club.id }}">View Details</button>
                 </div>
-                <div class="card">
-                    <h3>Club D</h3>
-                    <p>Description D</p>
-                </div>
+                {% endfor %}
+                
             </div>
-            <div class="featured-clubs">
-                <h2>Discover Clubs</h2>
-                <p>Explore a variety of clubs</p>
-                <a href="#" class="button">See More</a>
-            </div>
-        </div>
+
+            
     </div>
 
     <footer>
@@ -154,6 +139,18 @@
         document.getElementById('logout-button').addEventListener('click', function() {
         window.location.href = '/'; // Redirects the user to the homepage
     });
+  var viewClubButtons = document.querySelectorAll('.view-club-details');
+
+// Add event listener to each button
+viewClubButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        // Extract the club ID from the data-club-id attribute
+        var clubId = this.getAttribute('data-club-id');
+        // Construct the URL with the club ID and redirect
+        window.location.href = '/newclub/' + clubId;
+    });
+});
+
     </script>
     
 </body>

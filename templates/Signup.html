@@ -274,7 +274,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-custom text-white">
+  <nav class="navbar navbar-expand-lg navbar-custom text-white">
     <div class="container-fluid" style="color:hsl(208, 40%, 47%)">
         <a class="logo-container">
             <img src="https://github.com/hajarfawzi88/ClubHub/blob/Hajar/image.png?raw=true" width="100" style="border-radius: inherit;" alt="Cleana Logo">
@@ -307,7 +307,7 @@
                         <a class="nav-link" style="color:#b81515" href="{{url_for('signup')}}">Signup</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" style="color:rgb(0, 0, 0)" href="{{url_for('login')}}">Log in</a>
+                        <a class="nav-link" style="color:#000000" href="{{url_for('login')}}">Log in</a>
                     </li>
                 </li>
             </ul>
@@ -324,7 +324,6 @@
       <div class="div">Email Address</div>
       <div class="textfield-wrapper">
         <input
-        
           class="textfield"
           placeholder="Enter your email"
           type="text"
@@ -334,25 +333,27 @@
       <div class="div">Username</div>
       <div class="textfield-wrapper">
         <input
-        id="username"
           class="textfield"
           placeholder="Username"
           type="text"
           name="username"
-          autocomplete="off"
         />
       </div>
       <div class="div">Password</div>
       <div class="textfield-wrapper">
-        <input id="password" class="textfield" type="password" placeholder="Enter your password" name="password" autocomplete="off"/>
-        <button type="button" onclick="togglePasswordVisibility()" class="toggle-password">Show</button>
-    
+        <input
+          class="textfield"
+          placeholder="Enter your password"
+          name="password"
+        />
       </div>
       <div class="input">
         <div class="text-wrapper">Confirm Password</div>
-        <input id="password" class="textfield" type="password" placeholder="Enter your password" name="password" autocomplete="off"/>
-        <button type="button" onclick="toggleConfirmPasswordVisibility()" class="toggle-password">Show</button>
-    
+        <input
+          class="textfield"
+          placeholder="Enter your password"
+          name="confirm_password"
+        />
         <p class="info">
           Password must be at least 8 characters long and include a mix of
           uppercase, lowercase letters, numbers, and symbols
@@ -404,13 +405,9 @@
 
   
   <script>
-
     const signupButton = document.querySelector(".button");
     const chipGroup = document.querySelector(".chip-group");
-    window.onload = function() {
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-}
+
     function togglePasswordVisibility() {
       var passwordInput = document.getElementById("password");
       var toggleButton = document.querySelector(".toggle-password");
@@ -422,17 +419,6 @@
         toggleButton.textContent = "Show";
       }
     }
-    function toggleConfirmPasswordVisibility() {
-    var confirmPasswordInput = document.getElementById("confirm_password");
-    var toggleButton = confirmPasswordInput.nextElementSibling;  // Assumes button is next to the input
-    if (confirmPasswordInput.type === "password") {
-        confirmPasswordInput.type = "text";
-        toggleButton.textContent = "Hide";
-    } else {
-        confirmPasswordInput.type = "password";
-        toggleButton.textContent = "Show";
-    }
-}
 
     signupButton.addEventListener("click", (event) => {
       event.preventDefault(); // Prevent default form submission

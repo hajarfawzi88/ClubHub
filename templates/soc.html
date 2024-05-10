@@ -95,14 +95,29 @@
 <body>
     <div class="navbar">
         <div class="logo">
-            <img src="logo.png" alt="ClubHub Logo">
+            <img src="https://github.com/hajarfawzi88/ClubHub/blob/Hajar/image.png?raw=true" alt="ClubHub Logo">
             <h1>ClubHub</h1>
         </div>
         <button class="edit-button">Edit Club Info</button>
+        <button class="create-club-button">Create Club</button> <!-- New button for creating a club -->
     </div>
     
     <div class="container">
         <div class="main">
+            <div class="club-requests section">
+                <h2>Club Requests</h2>
+                <a href="#" class="button Review">Review</a>
+                <div class="requests">
+                    <div class="request">
+                        <p>Pending Request 1</p>
+                        <p>A new club needs Approval</p>
+                    </div>
+                    <div class="request">
+                        <p>Pending Request 2</p>
+                        <p>Content of event #332 needs approval</p>
+                    </div>
+                </div>
+            </div>
             <div class="event-management section">
                 <h2>Event Management</h2>
                 <a href="#" class="button">Review</a>
@@ -118,20 +133,7 @@
                 </div>
             </div>
 
-            <div class="club-requests section">
-                <h2>Club Requests</h2>
-                <a href="#" class="button">Review</a>
-                <div class="requests">
-                    <div class="request">
-                        <p>Pending Request 1</p>
-                        <p>A new event needs approval</p>
-                    </div>
-                    <div class="request">
-                        <p>Pending Request 2</p>
-                        <p>Content of event #332 needs approval</p>
-                    </div>
-                </div>
-            </div>
+
 
             <div class="club-activity section">
                 <h2>Club Activity</h2>
@@ -152,5 +154,40 @@
             © 2022 Club Management System. All Rights Reserved.
         </footer>
     </div>
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.Review').click(function(event) {
+                event.preventDefault(); // Prevent default link behavior
+
+                // Make AJAX request to Flask backend
+                $.ajax({
+                    type: 'GET',
+                    url: '/get_club_requests', // Route to fetch club requests
+                    success: function(response) {
+                        // Clear existing requests
+                        $('.requests').empty();
+
+                        // Append retrieved requests to the requests container
+                        response.forEach(function(request) {
+                            $('.requests').append(`
+                                <div class="request">
+                                    <p>Club Name: ${request.club_name}</p>
+                                    <p>Description: ${request.club_description}</p>
+                                    <p>Status: ${request.status}</p>
+                                </div>
+                            `);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 </html>
