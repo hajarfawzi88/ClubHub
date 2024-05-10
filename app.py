@@ -155,7 +155,6 @@ def get_club_requests():
 ##########################
 ##########################
 @app.route("/addnewclub", methods=['GET', 'POST'])
-
 def addnewclub():
  if request.method == 'GET':
         return render_template('addnewclub.html')  # Render signup form template
@@ -198,6 +197,47 @@ def addnewclub():
 #########################
 ##########################
 ##########################
+@app.route('/approve_request', methods=['POST'])
+def approve_request():
+    data = request.get_json()
+    request_id = data.get('request_id')
+
+    # Find the club request by ID
+    request_data = ClubRequest.query.get(request_id)
+
+    if request_data:
+        # Create a new club in the Club table
+        new_club = Club(name=request_data.club_name, description=request_data.club_description, image_url=request_data.club_image_url, head=request_data.user_id)
+        db.session.add(new_club)
+
+        # Update the status of the club request
+        request_data.status = 'approved'
+        db.session.commit()
+
+        return jsonify({'success': True, 'message': 'Club request approved and club created successfully'}), 200
+    else:
+        return jsonify({'success': False, 'message': 'Club request not found'}), 404
+
+@app.route('/deny_request', methods=['POST'])
+def deny_request():
+    data = request.get_json()
+    request_id = data.get('request_id')
+
+    # Find the club request by ID
+    request_data = ClubRequest.query.get(request_id)
+
+    if request_data:
+        # Delete the club request
+        db.session.delete(request_data)
+        db.session.commit()
+
+        return jsonify({'success': True, 'message': 'Club request denied and removed successfully'}), 200
+    else:
+        return jsonify({'success': False, 'message': 'Club request not found'}), 404
+
+
+
+
 @app.route("/service")
 def service():
     return render_template("service.html")

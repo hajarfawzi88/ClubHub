@@ -172,14 +172,61 @@
 
                         // Append retrieved requests to the requests container
                         response.forEach(function(request) {
-                            $('.requests').append(`
+                            // Append request details
+                            var requestHtml = `
                                 <div class="request">
                                     <p>Club Name: ${request.club_name}</p>
                                     <p>Description: ${request.club_description}</p>
                                     <p>Status: ${request.status}</p>
-                                </div>
-                            `);
+                                `;
+
+                            // Append approve and deny buttons
+                            requestHtml += `<button class="approve" data-request-id="${request.id}">Approve</button>`;
+                            requestHtml += `<button class="deny" data-request-id="${request.id}">Deny</button>`;
+                            requestHtml += `</div>`;
+
+                            $('.requests').append(requestHtml);
                         });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            // Handle click event for approve button
+            $(document).on('click', '.approve', function() {
+                var requestId = $(this).data('request-id');
+
+                // Make AJAX request to approve club request
+                $.ajax({
+                    type: 'POST',
+                    url: '/approve_request',
+                    data: JSON.stringify({ request_id: requestId }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        // Handle success response
+                        console.log(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            // Handle click event for deny button
+            $(document).on('click', '.deny', function() {
+                var requestId = $(this).data('request-id');
+
+                // Make AJAX request to deny club request
+                $.ajax({
+                    type: 'POST',
+                    url: '/deny_request',
+                    data: JSON.stringify({ request_id: requestId }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        // Handle success response
+                        console.log(response);
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
