@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clubs Organizer</title>
+<style>
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f1f1f1;
+}
+
+.search-bar input, .search-bar button, .user-info button {
+    padding: 10px;
+    margin-right: 10px;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.card, .event, .announcement {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: white;
+}
+
+.card .icon {
+    height: 50px;
+    background-color: #eee;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f1f1f1;
+}
+</style>
+
+</head>
+<body>
+<div class="header">
+    <h1>Clubs Organizer</h1>
+    <div class="search-bar">
+        <input type="text" placeholder="Discover Clubs">
+        <button>Search</button>
+    </div>
+    <div class="user-info">
+        <span>John Doe</span>
+        <button>Logout</button>
+    </div>
+</div>
+
+<div class="content">
+    <section class="clubs">
+        <h2>Your Clubs</h2>
+        <div class="card">
+            <div class="icon"></div>
+            <p>Club A</p>
+            <p>Description A</p>
+        </div>
+        <div class="card">
+            <div class="icon"></div>
+            <p>Club B</p>
+            <p>Description B</p>
+        </div>
+        <button>View All Joined Clubs</button>
+    </section>
+
+    <section class="events">
+        <h2>Upcoming Events</h2>
+        <div class="event">
+            <p>Event 1</p>
+            <p>Details 1</p>
+        </div>
+        <div class="event">
+            <p>Event 2</p>
+            <p>Details 2</p>
+        </div>
+        <button>View All Events</button>
+    </section>
+
+    <section class="announcements">
+        <h2>Announcements</h2>
+        <div class="announcement">
+            <p>Announcement 1</p>
+            <p>Details 1</p>
+        </div>
+        <div class="announcement">
+            <p>Announcement 2</p>
+            <p>Details 2</p>
+        </div>
+        <button>View All Announcements</button>
+    </section>
+</div>
+
+<footer>
+    <p>Clubs Organizer - All rights reserved</p>
+</footer>
+</body>
+</html>

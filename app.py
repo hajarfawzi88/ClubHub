@@ -1,4 +1,4 @@
-from flask import Flask , render_template,url_for,request ,jsonify
+from flask import Flask , render_template,url_for,request ,jsonify,redirect
 from math import sin,cos,tan,sqrt,pow
 import bcrypt  # Secure hashing library
 from flask_sqlalchemy import SQLAlchemy
@@ -86,6 +86,23 @@ def student():
 @app.route("/Clubs")
 def Clubs():
     return render_template("Clubs.html")
+
+@app.route("/soc")
+def soc():
+    return render_template("soc.html")
+
+
+@app.route("/Events")
+def Events():
+    return render_template("Events.html")
+@app.route("/Announcements")
+def Announcements():
+    return render_template("Announcements.html")
+
+
+@app.route("/userprofile")
+def userprofile():
+    return render_template("userprofile.html")
 ##Samas code:
 ############################
 ############################
@@ -152,23 +169,19 @@ def login():
     password = data.get('password')
 
     if not username or not password:
-        return jsonify({'success': False, 'message': 'Please fill in all fields.'}), 400  # Bad request
+        return jsonify({'success': False, 'message': 'Please fill in all fields.'}), 400
 
-    # Query user by username
-    with app.app_context():  # Ensure database session within request context
-        user = db.session.query(User).filter_by(username=username).first()
+    user = User.query.filter_by(username=username).first()
 
     if not user:
-        return jsonify({'success': False, 'message': 'Invalid username or password.'}), 401  # Unauthorized
+        return jsonify({'success': False, 'message': 'Invalid username or password.'}), 401
 
-    # Validate password
-    if not user.verify_password(password):
-        return jsonify({'success': False, 'message': 'Invalid username or password.'}), 401  # Unauthorized
+    if user.verify_password(password):
+        return jsonify({'success': True, 'message': 'Login successful', 'account_type': user.account_type})
+    else:
+        return jsonify({'success': False, 'message': 'Invalid username or password.'}), 401
 
-    # Login successful (replace with actual session management or token generation)
-    return jsonify({'success': True, 'message': 'Login successful!'}), 200  # OK
-
-############################
+############################    
 ############################
 ############################
 ############################

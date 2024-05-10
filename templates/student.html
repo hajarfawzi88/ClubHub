@@ -93,9 +93,11 @@
         </div>
         <div class="user-info">
             <span>John Doe</span>
-            <button>Logout</button>
+            <button id="view-clubs-button"class="btn btn-primary">View Clubs Joined</button> <!-- New Button -->
+            <button id="logout-button"class="btn btn-primary">Logout</button>
         </div>
     </div>
+    
 
     <div class="main-content">
         <div class="welcome-section">
@@ -145,5 +147,14 @@
     <footer>
         <p>Clubs Organizer - All rights reserved</p>
     </footer>
+    <script>
+        document.getElementById('view-clubs-button').addEventListener('click', function() {
+            window.location.href = '/Clubs'; // Directs the user to the Clubs page
+        });
+        document.getElementById('logout-button').addEventListener('click', function() {
+        window.location.href = '/'; // Redirects the user to the homepage
+    });
+    </script>
+    
 </body>
 </html>
