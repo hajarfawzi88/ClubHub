@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - ClubHub</title>
+    <link rel="icon" href="https://github.com/hajarfawzi88/ClubHub/blob/Hajar/image.png?raw=true" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            position: relative;
+            padding: 20px;
+        }
+
+        .container .title {
+            font-weight: 700;
+            color: #000;
+            font-size: 60px;
+            text-align: center;
+        }
+
+        .container .info-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .container .textfield {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 6px;
+            border: 2px solid #ccc;
+        }
+
+        .container .div {
+            align-self: stretch;
+            font-family: "Roboto-Medium", Helvetica;
+            font-weight: 500;
+            color: #000;
+            font-size: 30px;
+        }
+
+        .container .button, .container .edit-button, .container .save-button {
+            all: unset;
+            box-sizing: border-box;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            cursor: pointer;
+            background-color: #4bb0c2;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .bold-text {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .navbar-custom {
+            background-color: #95abcc;
+            color: rgb(2, 2, 2);
+        }
+
+        .background-container {
+            background-image: url('https://github.com/hajarfawzi88/ClubHub/blob/main/Clubsreal.jpeg?raw=true');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            height: 1250px;
+            opacity: 1;
+            position: relative;
+        }
+
+        .dark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(32, 39, 59, 0.9);
+        }
+
+        .login-container {
+            background-color: #95abcc;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 900px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom text-white">
+        <div class="container-fluid" style="color:hsl(208, 40%, 47%)">
+            <a class="logo-container">
+                <img src="https://github.com/hajarfawzi88/ClubHub/blob/Hajar/image.png?raw=true" width="100" style="border-radius: inherit;" alt="Cleana Logo">
+            </a>
+    
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" style="color:#b81515" aria-current="page" href="{{url_for('main')}}">Home</a>
+                    </li>
+    
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:rgb(0, 0, 0)" href="{{url_for('contacts')}}">Contact Us</a>
+                    </li>
+                </ul>
+    
+                <!-- Cart Icon -->
+                <button id="logout-button"class="btn btn-primary">Logout</button>
+            </div>
+        </div>
+    </nav>
+    <div class="background-container">
+        <div class="dark-overlay">
+            <div class="container">
+                <div class="login-container">
+                    <div class="title">Edit Profile</div>
+
+                    <div class="div">Email Address:</div>
+                    <div class="info-container">
+                        <span id="email" class="bold-text">{{ user.email if user else 'Guest' }}</span>
+                        <button class="edit-button" onclick="editField('email')">Edit</button>
+                    </div>
+                    <input
+                        id="emailInput"
+                        class="textfield"
+                        placeholder="Enter your email"
+                        type="text"
+                        name="email"
+                        value="{{ user.email if user else 'Guest' }}"
+                    />
+                    <button class="save-button" id="saveEmailButton" style="display: none;" onclick="saveEmailChanges()">Save</button>
+
+                    <div class="div">Username:</div>
+                    <div class="info-container">
+                        <span id="username" class="bold-text">{{ user.username if user else 'Guest' }}</span>
+                        <button class="edit-button" onclick="editField('username')">Edit</button>
+                    </div>
+                    <input
+                        id="usernameInput"
+                        class="textfield"
+                        placeholder="Username"
+                        type="text"
+                        name="username"
+                        value="{{ user.username if user else 'Guest' }}"
+                    />
+                    <button class="save-button" id="saveUsernameButton" style="display: none;" onclick="saveUsernameChanges()">Save</button>
+
+                    <div class="div">Password:</div>
+                    <button class="edit-button" onclick="editPassword()">Edit</button>
+                    <div id="passwordFields" style="display: none;">
+                        <div class="info-container">
+                            <label for="password">old Password</label>
+                            <input
+                              type="password"
+                              name="old_password"
+                              id="password"
+                              placeholder="Enter your password"
+                              autocomplete="off"
+                            />
+                        </div>
+                        
+                        <div class="info-container">
+                            <label for="password">new Password</label>
+                            <input
+                              type="password"
+                              name="new_password"
+                              id="password"
+                              placeholder="Enter your password"
+                              autocomplete="off"
+                            />
+                        </div>
+                        
+                        <div class="info-container">
+                            <label for="password">confirm Password</label>
+                            <input
+                              type="password"
+                              name="confirm_new_password"
+                              id="password"
+                              placeholder="Enter your password"
+                              autocomplete="off"
+                            />
+                        </div>
+                    </div>
+                    <button class="save-button" id="savePasswordButton" style="display: none;" onclick="savePasswordChanges()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function editField(field) {
+            const span = document.getElementById(field);
+            const input = document.getElementById(`${field}Input`);
+            const saveButton = document.getElementById(`save${capitalizeFirstLetter(field)}Button`);
+
+            span.style.display = "none";
+            input.style.display = "block";
+            input.focus();
+            saveButton.style.display = "inline-flex";
+        }
+
+        function editPassword() {
+            const passwordFields = document.getElementById("passwordFields");
+            const saveButton = document.getElementById("savePasswordButton");
+
+            passwordFields.style.display = "block";
+            saveButton.style.display = "inline-flex";
+        }
+        function saveEmailChanges() {
+            const emailInput = document.querySelector('input[name="email"]');
+            let isValid = true;
+            const errorMessages = [];
+            if (!isValidEmail(emailInput.value)) {
+                isValid = false;
+                print("nottttttttttt")
+                errorMessages.push("Please enter a valid email address.");
+            }
+
+            if (isValid) {
+                const formData = {
+                    email: emailInput.value,
+                };
+
+                fetch("/Editprofile", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (!data.success) {
+                        alert(data.errors.join("\n"));
+                    } else {
+                        alert(data.message);
+                        document.getElementById('email').textContent = emailInput.value;
+                        emailInput.style.display = 'none';
+                        document.getElementById('email').style.display = 'inline';
+                        document.getElementById('saveEmailButton').style.display = "none";
+                    }
+                })
+                .catch((error) => {
+                    console.log("Request failed", error);
+                });
+            } else {
+                alert(errorMessages.join("\n"));
+            }
+        }
+
+        function saveUsernameChanges() {
+            const usernameInput = document.querySelector('input[name="username"]');
+            let isValid = true;
+            const errorMessages = [];
+            if (usernameInput.value.length < 6) {
+                isValid = false;
+                errorMessages.push("Username must be at least 6 characters long.");
+            }
+
+            if (isValid) {
+                const formData = {
+                    username: usernameInput.value,
+                };
+
+                fetch("/Editprofile", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (!data.success) {
+                        alert(data.errors.join("\n"));
+                    } else {
+                        alert(data.message);
+                        document.getElementById('username').textContent = usernameInput.value;
+                        usernameInput.style.display = 'none';
+                        document.getElementById('username').style.display = 'inline';
+                        document.getElementById('saveUsernameButton').style.display = "none";
+                    }
+                })
+                .catch((error) => {
+                    console.log("Request failed", error);
+                });
+            } else {
+                alert(errorMessages.join("\n"));
+            }
+        }
+
+        function savePasswordChanges() {
+            const oldPasswordInput = document.querySelector('input[name="old_password"]');
+            const newPasswordInput = document.querySelector('input[name="new_password"]');
+            const confirmNewPasswordInput = document.querySelector('input[name="confirm_new_password"]');
+
+            let isValid = true;
+            const errorMessages = [];
+
+            if (!isValidPassword(newPasswordInput.value)) {
+                isValid = false;
+                errorMessages.push(
+                    "New password must be at least 8 characters long and include a mix of uppercase, lowercase letters, numbers, and symbols."
+                );
+            } else if (newPasswordInput.value !== confirmNewPasswordInput.value) {
+                isValid = false;
+                errorMessages.push("New passwords do not match.");
+            }
+
+            if (isValid) {
+                const formData = {
+                    old_password: oldPasswordInput.value,
+                    new_password: newPasswordInput.value,
+                    confirm_new_password: confirmNewPasswordInput.value,
+                };
+
+                fetch("/Editprofile", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (!data.success) {
+                        alert(data.errors.join("\n"));
+                    } else {
+                        alert(data.message);
+                        document.getElementById('passwordFields').style.display = 'none';
+                        document.getElementById('savePasswordButton').style.display = "none";
+                    }
+                })
+                .catch((error) => {
+                    console.log("Request failed", error);
+                });
+            } else {
+                alert(errorMessages.join("\n"));
+            }
+        }
+
+        function isValidEmail(email) {
+      const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      return emailRegex.test(email);
+    }
+
+        function isValidPassword(password) {
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            return passwordRegex.test(password);
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        document.getElementById('logout-button').addEventListener('click', function() {
+                window.location.href = '/logout'; // Redirects the user to the homepage
+    });
+    
+    </script>
+</body>
+</html>
+22

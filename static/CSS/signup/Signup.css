@@ -1,245 +1,239 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  height: 685px;
-  align-items: center;
-  gap: 24px;
-  position: relative;
-}
-
-.container .title-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  position: relative;
-  align-self: stretch;
-  width: 100%;
-  flex: 0 0 auto;
-}
-
-.container .title {
-  width: 520px;
-  margin-top: -1px;
-  font-family: "Roboto-Bold", Helvetica;
-  font-weight: 700;
-  color: #000000;
-  font-size: 40px;
-  text-align: center;
-  line-height: 48px;
-  position: relative;
-  letter-spacing: 0;
-}
-
-.container .input {
-  width: 600px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 4px;
-  position: relative;
-  flex: 0 0 auto;
-}
-
-.container .text-wrapper {
-  align-self: stretch;
-  margin-top: -1px;
-  font-family: "Roboto-Medium", Helvetica;
-  font-weight: 500;
-  color: #000000;
-  font-size: 14px;
-  line-height: 20px;
-  position: relative;
-  letter-spacing: 0;
-}
-
-.container .textfield {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  position: relative;
-  align-self: stretch;
-  width: 100%;
-  flex: 0 0 auto;
-  background-color: #ffffff;
-  border-radius: 6px;
-  border: 1px solid;
-  border-color: #0000001a;
-}
-
-.container .text {
-  flex: 1;
-  height: 20px;
-  color: #00000080;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  position: relative;
-  margin-top: -1px;
-  font-family: "Roboto-Regular", Helvetica;
-  font-weight: 400;
-  font-size: 14px;
-  letter-spacing: 0;
-  line-height: 20px;
-  white-space: nowrap;
-}
-
-.container .div {
-  width: 602px;
-  height: 9px;
-  font-family: "Roboto-Medium", Helvetica;
-  font-weight: 500;
-  color: #000000;
-  font-size: 14px;
-  line-height: 20px;
-  white-space: nowrap;
-  position: relative;
-  letter-spacing: 0;
-}
-
-.container .textfield-wrapper {
-  width: 596px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 4px;
-  position: relative;
-  flex: 0 0 auto;
-}
-
-.container .textfield-2 {
-  padding: 8px 12px;
-  position: relative;
-  align-self: stretch;
-  width: 100%;
-  background-color: #ffffff;
-  border-radius: 6px;
-  border: 1px solid;
-  border-color: #0000001a;
-  flex: 1;
-  height: 20px;
-  color: #00000080;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  margin-top: -1px;
-  font-family: "Roboto-Regular", Helvetica;
-  font-weight: 400;
-  font-size: 14px;
-  letter-spacing: 0;
-  line-height: 20px;
-  white-space: nowrap;
-}
-
-.container .info {
-  position: relative;
-  align-self: stretch;
-  font-family: "Roboto-Regular", Helvetica;
-  font-weight: 400;
-  color: #00000080;
-  font-size: 12px;
-  letter-spacing: 0;
-  line-height: 16px;
-}
-
-.container .selection {
-  display: flex;
-  flex-direction: column;
-  width: 600px;
-  align-items: center;
-  gap: 4px;
-  position: relative;
-  flex: 0 0 auto;
-}
-.toggle-password {
-  position: absolute;
-  top: 50%; /* Position the button vertically at 50% */
-  transform: translateY(-50%); /* Adjust vertically based on button height */
-  right: 10px; /* Position the button horizontally with some right padding */
-  background-color: transparent;
-  border: none;
-  color: blue;
-  cursor: pointer;
-}
-.input .toggle-password {
-  transform: translateY(-150%); /* Adjust vertically based on button height */
-}
-.container .chip-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px; /* Adjust spacing between chips */
-}
-
-.container label {
-  display: flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 8px; /* Rounded corners for button-like appearance */
-  background-color: #f0f0f0; /* Default background color */
-  cursor: pointer;
-  transition: background-color 0.3s; /* Smooth transition for background color */
-}
-
-.container input[type="radio"] {
-  display: none; /* Hide the radio buttons */
-}
-
-.container input[type="radio"]:checked + .text-2 {
-  background-color: #007bff; /* Blue background when selected */
-  color: white; /* White text when selected */
-  display: flex;
-  align-items: center;
-  border-radius: 8px; /* Rounded corners for button-like appearance */
-  cursor: pointer;
-  transition: background-color 0.3s; /* Smooth transition for background color */
-}
-
-.container .text-2 {
-  padding: 10px; /* Ensure padding is enough for a good button-like appearance */
-  display: block; /* Make the text block to fill the label */
-}
-
-.container .button {
-  all: unset;
-  box-sizing: border-box;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  position: relative;
-  flex: 0 0 auto;
-  cursor: pointer;
-}
-
-.container .primary {
-  display: flex;
-  flex-direction: column;
-  width: 160px;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  position: relative;
-  flex: 0 0 auto;
-  background-color: #000000;
-  border-radius: 8px;
-}
-
-.container .title-2 {
-  width: fit-content;
-  margin-top: -1px;
-  font-family: "Roboto-Medium", Helvetica;
-  font-weight: 500;
-  color: #ffffff;
-  font-size: 16px;
-  line-height: 24px;
-  white-space: nowrap;
-  position: relative;
-  letter-spacing: 0;
-}
+    display: flex;
+    flex-direction: column;
+    height: 685px;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+  }
+  
+  .container .title-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+  }
+  
+  .container .title {
+    width: 520px;
+    margin-top: -1px;
+    font-family: "Roboto-Bold", Helvetica;
+    font-weight: 700;
+    color: #000000;
+    font-size: 40px;
+    text-align: center;
+    line-height: 48px;
+    position: relative;
+    letter-spacing: 0;
+  }
+  
+  .container .input {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
+    flex: 0 0 auto;
+  }
+  
+  .container .text-wrapper {
+    align-self: stretch;
+    margin-top: -1px;
+    font-family: "Roboto-Medium", Helvetica;
+    font-weight: 500;
+    color: #000000;
+    font-size: 14px;
+    line-height: 20px;
+    position: relative;
+    letter-spacing: 0;
+  }
+  
+  .container .textfield {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+    background-color: #ffffff;
+    border-radius: 6px;
+    border: 1px solid;
+    border-color: #0000001a;
+  }
+  
+  .container .text {
+    flex: 1;
+    height: 20px;
+    color: #00000080;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    position: relative;
+    margin-top: -1px;
+    font-family: "Roboto-Regular", Helvetica;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 20px;
+    white-space: nowrap;
+  }
+  
+  .container .div {
+    width: 602px;
+    height: 9px;
+    font-family: "Roboto-Medium", Helvetica;
+    font-weight: 500;
+    color: #000000;
+    font-size: 14px;
+    line-height: 20px;
+    white-space: nowrap;
+    position: relative;
+    letter-spacing: 0;
+  }
+  
+  .container .textfield-wrapper {
+    width: 596px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
+    flex: 0 0 auto;
+  }
+  
+  .container .textfield-2 {
+    padding: 8px 12px;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 6px;
+    border: 1px solid;
+    border-color: #0000001a;
+    flex: 1;
+    height: 20px;
+    color: #00000080;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    margin-top: -1px;
+    font-family: "Roboto-Regular", Helvetica;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 20px;
+    white-space: nowrap;
+  }
+  
+  .container .info {
+    position: relative;
+    align-self: stretch;
+    font-family: "Roboto-Regular", Helvetica;
+    font-weight: 400;
+    color: #00000080;
+    font-size: 12px;
+    letter-spacing: 0;
+    line-height: 16px;
+  }
+  
+  .container .selection {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+    flex: 0 0 auto;
+  }
+  
+  .container .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust spacing between chips */
+  }
+  
+  .container label {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px; /* Adjust padding */
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Adjust border radius */
+    background-color: #f0f0f0; /* Adjust background color */
+    cursor: pointer;
+  }
+  
+  /* TODO this is not applied */
+  .container label:checked {
+    /* Existing styles for the checked label element */
+    background-color: black; /* Adjust background color */
+    color: #ffffff; /* Text color */
+  }
+  
+  .container input[type="radio"] {
+    display: none;
+  }
+  
+  .container .text-2 {
+    width: fit-content;
+    color: #000000;
+    position: relative;
+    margin-top: -1px;
+    font-family: "Roboto-Regular", Helvetica;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 20px;
+    white-space: nowrap;
+  }
+  
+  .container .button {
+    all: unset;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    position: relative;
+    flex: 0 0 auto;
+    cursor: pointer;
+  }
+  
+  .container .primary {
+    display: flex;
+    flex-direction: column;
+    width: 160px;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    position: relative;
+    flex: 0 0 auto;
+    background-color: #000000;
+    border-radius: 8px;
+  }
+  
+  .container .title-2 {
+    width: fit-content;
+    margin-top: -1px;
+    font-family: "Roboto-Medium", Helvetica;
+    font-weight: 500;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 24px;
+    white-space: nowrap;
+    position: relative;
+    letter-spacing: 0;
+  }
+  

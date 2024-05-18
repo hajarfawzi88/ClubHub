@@ -1,74 +1,49 @@
-<!-- login credintials 
-username: 12345678
-password: 1120sMall@
- -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login Page</title>
-  </head>
-  <body>
-    <div class="login-container">
-      <h1>Welcome Back</h1>
-      <form id="login-form">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            placeholder="Enter your username"
-          />
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Enter your password"
-          />
-        </div>
-        <div class="form-group">
-          <input type="checkbox" id="remember-me" />
-          <label for="remember-me">Remember Me</label>
-        </div>
-        <button type="submit">Login</button>
-        <a href="#">Forgot Password?</a>
-      </form>
-    </div>
-  </body>
-</html>
-<style>
-  body {
-    font-family: sans-serif;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=2.0">
+    <title>ClubHub</title>
+    <link rel="icon" href="https://github.com/hajarfawzi88/ClubHub/blob/Hajar/image.png?raw=true" type="image/png" >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f0f0;
+    flex-direction: column;
+    height: 685px;
+    top: 20%;
+    left: 22%;
+    gap: 100px;
+    position: relative;
   }
+  
 
-  .login-container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 400px;
-  }
+  .ml-auto {
+            margin-left: auto !important;
+        }
 
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  .form-group {
-    margin-bottom: 15px;
-  }
-
-  label {
+  .background-container {
+            background-image: url('https://github.com/hajarfawzi88/ClubHub/blob/main/Clubsreal.jpeg?raw=true'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            height: 1000px; /* Adjust the height as needed */
+            opacity: 01;
+            position: relative;
+        }
+        .dark-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(32, 39, 59, 0.9); /* Adjust the alpha value for darkness */
+    }
+        .navbar-custom {
+    background-color: #95abcc; /* Example: blue */
+    color: rgb(2, 2, 2); /* Ensures text is readable on a dark background */
+}
+label {
     display: block;
     margin-bottom: 5px;
   }
@@ -102,61 +77,148 @@ password: 1120sMall@
     display: block;
     text-align: center;
     margin-top: 10px;
-    color: #aaaaaa;
+    color: #000000;
   }
-</style>
-<script>
-  const usernameInput = document.getElementById("username");
-  const passwordInput = document.getElementById("password");
+  .login-container {
+    background-color: #95abcc;
+    padding: 25px ; 
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 400px;
+  }
 
-  usernameInput.addEventListener("focus", () => {
-    if (usernameInput.value === "Enter your username") {
-      usernameInput.value = "";
-    }
-  });
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
 
-  passwordInput.addEventListener("focus", () => {
-    if (passwordInput.value === "Enter your password") {
-      usernameInput.value = "";
-      passwordInput.type = "password"; // Change input type to password on focus
-    }
-  });
+  .form-group {
+    margin-bottom: 15px;
+  }
 
-  const loginForm = document.getElementById("login-form");
-  loginForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // Prevent default form submission
+ 
 
-    // Here you would add logic to validate username and password (e.g., send data to server)
-    const username = usernameInput.value;
-    const password = passwordInput.value;
+    </style>
+</head>
+<body>
 
-    if (username === "" || password === "") {
-      alert("Please fill in all fields.");
-      return;
-    }
 
-    // Simulate sending data to server (replace with your backend interaction)
-    fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username: username, password: password }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          // Login successful, redirect or display success message
-          alert("Login successful!");
-          // Replace with your redirection logic (e.g., window.location.href = '/home')
-        } else {
-          // Login failed, display error message
-          alert(data.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Error logging in:", error);
-        alert("An error occurred. Please try again later.");
-      });
-  });
-</script>
+    <nav class="navbar navbar-expand-lg navbar-custom text-white">
+        <div class="container-fluid" style="color:hsl(208, 40%, 47%)">
+            <a class="logo-container">
+                <img src="https://github.com/hajarfawzi88/ClubHub/blob/Hajar/image.png?raw=true" width="100" style="border-radius: inherit;" alt="Cleana Logo">
+            </a>
+    
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" style="color:#000000" aria-current="page" href="{{url_for('main')}}">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:rgb(0, 0, 0)" href="{{url_for('contacts')}}">Contact Us</a>
+                    </li>
+                </ul>
+    
+                <!-- Cart Icon -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <li class="nav-item">
+                            <a class="nav-link" style="color:#000000" href="{{url_for('signup')}}">Signup</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="color:#b81515" href="{{url_for('login')}}">Log in</a>
+                        </li>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="background-container">
+        <div class="dark-overlay">
+<div class="container">
+    <div class="login-container">
+      <h1 >Welcome Back</h1>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Enter your username"
+            autocomplete="off"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter your password"
+            autocomplete="off"
+          />
+        </div>
+        <div class="form-group">
+            <label for="remember-me">Remember Me</label>
+          <input type="checkbox" id="remember-me" />
+
+        </div>
+        <button type="submit">Login</button>
+        <a href="#">Forgot Password?</a>
+      </form>
+   
+    </div>
+</div>
+
+  </body>
+
+
+  <script>
+    
+    window.onload = function() {
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+}
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({username: username, password: password})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirect based on the account type
+                if (data.account_type === 'student') {
+                    window.location.href = 'olduser'; // Redirect to student page
+                } else if (data.account_type === 'club_manager') {
+                    window.location.href = 'clubmanager'; // Redirect to student page
+                } else 
+                {
+                  window.location.href = 'soc';
+                }
+            } else {
+                alert(data.message); // Show error message
+            }
+        })
+        .catch(error => {
+            console.error('Login failed:', error);
+            alert('Login failed due to an error: ' + error.message);
+        });
+    });
+  </script>
+</html>
