@@ -9,7 +9,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #9b1e1e;
         }
         .header {
             background-color: #95abcc;
@@ -130,32 +129,27 @@
             <button id="logout-button"class="btn btn-primary">Logout</button>
         </div>
     </div>
-        <div class="background-container">
-            <div class="dark-overlay">
-    <div class="main-content">
-        <div class="left-column">
-            <h2>Joined Clubs</h2>
-            <p>Stay updated with club activities</p>
-        </div>
-        <div class="right-column">
-            <div class="club-card">
-                <div class="club-card">
-                    <h2 style="color:#ffffff" >Your Clubs</h2>
+    <div class="background-container">
+        <div class="dark-overlay">
+            <div class="main-content">
+                <div class="left-column">
+                    <h2>Joined Clubs</h2>
+                    <p>Stay updated with club activities</p>
+                </div>
+                <div class="right-column">
+                    <h2 style="color:#ffffff">Your Clubs</h2>
                     {% for club in clubs %}
-                    
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ club.name }}</h5>
-                            <p class="card-text">{{ club.description }}</p>
-                            
-                        </div>
+                    <div class="club-card">
+                        <h5 class="card-title">{{ club.name }}</h5>
+                        <p class="card-text">{{ club.description }}</p>
+                        <!-- Button to view events for each club -->
+                        <a href="/club_events/{{ club.id }}" class="event-button">View Events</a>
                     </div>
                     {% endfor %}
-                <a href="#" class="event-button">View All Events</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
 <script>         
    document.getElementById('logout-button').addEventListener('click', function() {
     window.location.href = '/'; // Redirects the user to the homepage
