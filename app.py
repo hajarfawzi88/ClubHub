@@ -7,7 +7,7 @@ import re
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DB.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DB2.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 app.secret_key = '123'
@@ -236,24 +236,23 @@ def isValidEmail(email):
 def isValidPassword(password):
     password_regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
     return re.match(password_regex, password) is not None
-
+    
+def get_current_user():
+    if 'user_id' in session:
+        user_id = session['user_id']
+        return User.query.get(user_id)
+    return None
 
 @app.route('/get_club_requests', methods=['GET'])
 def get_club_requests():
-    # Fetch all club requests from the database
-    requests = ClubRequest.query.all()
-
-    # Serialize the requests to JSON format
+    requests = ClubRequest.query.all()  # Fetch all requests (adjust according to your data model)
     serialized_requests = [{
-        'id': request.id,
-        'user_id': request.user_id,
-        'username': request.user.username,
-        'club_name': request.club_name,
-        'club_description': request.club_description,
-        'club_image_url': request.club_image_url,
-        'status': request.status
-    } for request in requests]
-
+        'id': req.id,
+        'club_name': req.club_name,
+        'club_description': req.club_description,
+        'username': req.user.username,  # Assuming each request is associated with a user
+        'status': req.status
+    } for req in requests]
     return jsonify(serialized_requests)
 
 
@@ -399,7 +398,6 @@ def service():
 def About():
     return render_template("About.html")
 
-
 @app.route("/olduser")
 def olduser():
     print("Entering olduser route")
@@ -409,14 +407,15 @@ def olduser():
         if user:
             print(f"Logged in as {user.username}")
 
-            # Fetch clubs where the user is a member
-            member_clubs = user.clubs  # Assuming this fetches clubs where the user is a member through the many-to-many relationship
-
-            # Fetch clubs where the user is the head
+            # Fetch clubs where the user is a member and head
+            clubs = []
+            member_clubs = user.clubs
             headed_clubs = Club.query.filter_by(head_id=user_id).all()
 
-            # Combine both lists, ensuring no duplicates
-            clubs = list(set(member_clubs + headed_clubs))
+            # Create a list of dictionaries including the club and the user's role
+            for club in set(member_clubs + headed_clubs):
+                role = "Head" if club in headed_clubs else "Member"
+                clubs.append({'club': club, 'role': role})
 
             return render_template("olduser.html", user=user, clubs=clubs)
         else:
@@ -425,7 +424,6 @@ def olduser():
         print("No user in session")
 
     return redirect('/')
-
 
 @app.route("/newclub/<int:club_id>")
 def newclub(club_id):
@@ -466,14 +464,30 @@ def newclub(club_id):
 
 @app.route("/student")
 def student():
-    if 'user_id' not in session:
-        return redirect('/login')
-    user_id = session['user_id']
-    user = User.query.get(user_id)
-    if not user:
-        return 'User not found', 404
-    clubs = [membership.club for membership in user.memberships]
-    return render_template('student.html', clubs=clubs)
+    print("Entering olduser route")
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = User.query.get(user_id)
+        if user:
+            print(f"Logged in as {user.username}")
+
+            # Fetch clubs where the user is a member
+            member_clubs = user.clubs  # Assuming this fetches clubs where the user is a member through the many-to-many relationship
+
+            # Fetch clubs where the user is the head
+            headed_clubs = Club.query.filter_by(head_id=user_id).all()
+
+            # Combine both lists, ensuring no duplicates
+            clubs = list(set(member_clubs + headed_clubs))
+
+            return render_template("student.html", user=user, clubs=clubs)
+        else:
+            print("User not found")
+    else:
+        print("No user in session")
+
+    return redirect('/')
+
 
 @app.route("/clubmanager")
 def clubmanager():
@@ -559,31 +573,55 @@ def Tasks():
     return render_template("Tasks.html")
 
 @app.route('/tasks/<int:club_id>', methods=['GET', 'POST'])
-# @login_required  # Ensure user is logged in
 def view_tasks(club_id):
     current_user = get_current_user()
-    # Check if user is a member of the club
-    # if not is_member(current_user.id, club_id):
-    #     flash('You are not a member of this club.', category='error')
-    #     return redirect(url_for('view_clubs'))  # Redirect to view clubs page
-
+    if current_user is None:
+        return jsonify({'message': 'User not logged in'}), 401
+    
     if request.method == 'GET':
         tasks = Task.query.filter_by(club_id=club_id, assigned_to=current_user.id).all()
         if not tasks:
-            # Option 1: Pass an empty list and handle in template
-            return render_template("Tasks.html", tasks=[], club_id=club_id)
+            return render_template("Tasks.html", tasks=[], club_id=club_id, user=current_user.username)
         else:
-            # Option 2: Render tasks normally (existing code)
-            return render_template("Tasks.html", tasks=tasks, club_id=club_id)
-    else:  # Handle POST requests for task management (e.g., marking complete)
-        # Implement logic to handle task management based on form data
-        # ...
-        return redirect(url_for('view_tasks', club_id=club_id))
+            return render_template("Tasks.html", tasks=tasks, club_id=club_id, user=current_user.username)
+    elif request.method == 'POST': 
+        data = request.get_json()
+        title = data.get('title')
+        description = data.get('description')
+        due_date = data.get('due_date')
+        assigned_to = data.get('assigned_to')
+        club_id = data.get('club_id')
+
+        # Validate input data
+        if not all([title, description, due_date, assigned_to, club_id]):
+            return jsonify({'message': 'Missing data'}), 400
+
+        # Convert due_date to datetime object
+        try:
+            due_date = datetime.strptime(due_date, '%Y-%m-%dT%H:%M')
+        except ValueError:
+            return jsonify({'message': 'Invalid date format'}), 400
+
+        # Create a new task
+        new_task = Task(
+            title=title,
+            description=description,
+            due_date=due_date,
+            assigned_to=assigned_to,
+            club_id=club_id
+        )
+        db.session.add(new_task)
+        db.session.commit()
+
+        return jsonify({'message': 'Task added successfully'}), 200
 
 @app.route("/Announcements")
 def Announcements():
     return render_template("Announcements.html")
 
+@app.route("/addnewtask")
+def addnewtask():
+    return render_template("addnewtask.html")
 
 @app.route("/userprofile")
 def userprofile():
@@ -649,19 +687,19 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html')  # Display the login form
+        return render_template('login.html')
     elif request.method == 'POST':
-      data = request.get_json()
-      username = data.get('username')
-      password = data.get('password')
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
 
-    # Dummy user check
-      user = User.query.filter_by(username=username).first()
-      if user and user.verify_password(password):
-         session['user_id'] = user.id  # Set user ID in session
-         return jsonify({'success': True, 'message': 'Login successful', 'account_type': user.account_type}), 200
-      else:
-         return jsonify({'success': False, 'message': 'Invalid username or password.'}), 401
+        user = User.query.filter_by(username=username).first()
+        if user and user.verify_password(password):
+            session['user_id'] = user.id
+            session['username'] = user.username
+            return jsonify({'success': True, 'message': 'Login successful', 'account_type': user.account_type}), 200
+        else:
+            return jsonify({'success': False, 'message': 'Invalid username or password.'}), 401
 
 
 
