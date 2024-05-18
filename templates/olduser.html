@@ -110,13 +110,16 @@
                         <p><strong>Role:</strong> {{ club_info.role }}</p>
                         <!-- Conditional rendering based on role -->
                         {% if club_info.role == "Head" %}
-                            <button class="btn btn-info">Add Task</button>
-                            <button class="btn btn-info">Request Event</button>
-                            <button class="btn btn-info">Add Announcement</button>
+                            <a href="#" class="btn btn-info">Add Task</a>
+                            <a href="#" id="Request-event" class="btn btn-info" >Request Event</a>
+                            <a href="#" class="btn btn-info">Add Announcement</a>
+                            <a href="#" class="btn btn-info">Add Members</a>
+                            <button class="btn btn-primary Club-details" data-club-id="{{ club_info.club.id }}">Edit club Details</button>
+
                         {% else %}
                             <button class="btn btn-secondary">View Tasks</button>
                         {% endif %}
-                        <a href="#" class="btn btn-primary">View Details</a>
+                        
                     </div>
                 </div>
                 {% endfor %}    
@@ -169,9 +172,28 @@
     </div>
 </div>
         <script>
+var viewClubButtons = document.querySelectorAll('.Club-details');
+    // Add event listener to each button
+    viewClubButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        // Extract the club ID from the data-club-id attribute
+        var clubId = this.getAttribute('data-club-id');
+        // Construct the URL with the club ID and redirect
+        window.location.href = '/Editclub/' + clubId;
+    });
+});  
+    document.getElementById('Request-event').addEventListener('click', function() {
+                window.location.href = '/RequestEvents';  // Directs to the student or any appropriate page
+            });
+            document.getElementById('logout-button').addEventListener('click', function() {
+                window.location.href = '/logout'; // Redirects the user to the homepage
+    });
             // Assuming "view-all-joined-clubs" is the ID for "View All Joined Clubs" button
             document.getElementById('view-all-joined-clubs').addEventListener('click', function() {
                 window.location.href = '/Clubs';  // Directs to the correct Clubs page
+            });
+            document.getElementById('Edit-button').addEventListener('click', function() {
+                window.location.href = '/Editprofile';  // Directs to the student or any appropriate page
             });
             // Ensuring "join-new-clubs" is the ID for "Join New Clubs" button
             document.getElementById('join-new-clubs').addEventListener('click', function() {
@@ -183,15 +205,13 @@
             document.getElementById('view-all-announcements').addEventListener('click', function() {
                 window.location.href = '/Announcements';  // Directs to the student or any appropriate page
             });
+
             document.getElementById('Club details').addEventListener('click', function() {
                 window.location.href = '/Announcements';  // Directs to the student or any appropriate page
             });
-            document.getElementById('logout-button').addEventListener('click', function() {
-                window.location.href = '/logout'; // Redirects the user to the homepage
-    });
-    document.getElementById('Edit-button').addEventListener('click', function() {
-                window.location.href = '/Editprofile';  // Directs to the student or any appropriate page
-            });
+
+
+
         </script>
         
 

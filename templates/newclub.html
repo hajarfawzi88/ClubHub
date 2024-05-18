@@ -72,59 +72,54 @@
     </style>
 </head>
 <body>
+    {% if club %}
     <div class="header">
         <h1>{{ club.name }}</h1>
         <p>{{ club.description }}</p>
     </div>
-    
-    <div class="president-info">
-        <div>
+
+    {% if can_view_details %}
+        <div class="president-info">
             <h2>President: {{ head_email }}</h2>
-            <p>Contact for more info</p>
+            <button class="button">Contact</button>
         </div>
-        <button class="button">Contact</button>
-    </div>
-    
-    <div class="club-info">
-        <h3>Club Contact</h3>
-        <div>
-            <p>Email: not Defined Yet</p>
-            <p>Website: not Defined Yet</p>
-        </div>
-    </div>
-    
-    
-    <h3 class="discussion-board"> Discussion Board</h3>
-    {% for topic in club.discussion_topics %}
-    <div class="discussion-topic">
-        <h4>{{ topic.title }}</h4>
-        <p>{{ topic.description }}</p>
-    </div>
-    {% endfor %}
-    
-    <div class="events">
-        <div>
-            <h3>Upcoming Events</h3>
-        </div>
-        {% for event in club.events %}
-        <div>
-            <h4>{{ event.title }}</h4>
-            <p>Date: {{ event.date }}</p>
-            <button class="button">RSVP</button>
+        <h3 class="discussion-board"> Discussion Board</h3>
+        {% for topic in club.discussion_topics %}
+        <div class="discussion-topic">
+            <h4>{{ topic.title }}</h4>
+            <p>{{ topic.description }}</p>
         </div>
         {% endfor %}
-    </div>
-    
-    <div class="club-join">
-        {% if not user_joined_club or not is_club_head %}
-            <div><input type="text" placeholder="Your Name"></div>
-            <div><input type="email" placeholder="Your Email"></div>
-            <div><input type="text" placeholder="Year of Study"></div>
-            <button class="button">Join Club</button>
-        {% else %}
-            <p>JOINED</p>
-        {% endif %}
-    </div>
+        <div class="discussion-topic">
+        <h3 class="Description"> Description</h3>
+            <p>{{ club.description }}</p>
+        </div>
+        <!-- Other details like events, discussion board, etc. -->
+        <div class="events">
+            <h3>Upcoming Events</h3>
+            {% for event in club.events %}
+            <div>
+                <h4>{{ event.name }}</h4>
+                <p>Date: {{ event.date.strftime('%Y-%m-%d') }}</p>
+                <button class="button">RSVP</button>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="club-join">
+            <h3>Join the Club</h3>
+            <form method="post" action="{{ url_for('join_club', club_id=club.id) }}">
+                <input type="text" placeholder="Your Name" name="name" required>
+                <input type="email" placeholder="Your Email" name="email" required>
+                <button type="submit" class="button">Join Club</button>
+            </form>
+        </div>
+    {% endif %}
+{% else %}
+    <p>Club not found.</p>
+{% endif %}
+
+
     
     
     

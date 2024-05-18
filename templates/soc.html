@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Club Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
         body, h1, h2, h3, p, div {
             margin: 0;
@@ -20,20 +21,15 @@
             padding: 10px 20px;
             width: 100%;
         }
-        .navbar .logo {
-            display: flex;
-            align-items: center;
-        }
         .navbar .logo img {
-            width: 30px; /* Example size */
+            width: 30px;
             height: 30px;
             margin-right: 10px;
         }
         .navbar h1 {
-            margin: 0;
             font-size: 24px;
         }
-        .navbar .edit-button {
+        .edit-button, .create-club-button {
             padding: 8px 16px;
             background: none;
             border: 2px solid white;
@@ -99,106 +95,65 @@
             <h1>ClubHub</h1>
         </div>
         <button class="edit-button">Edit Club Info</button>
-        <button class="create-club-button">Create Club</button> <!-- New button for creating a club -->
-        <button id="logout-button"class="btn btn-primary">Logout</button>
-                    
+        <button class="create-club-button">Create Club</button>
+        <button id="logout-button" class="btn btn-primary">Logout</button>
     </div>
     
     <div class="container">
         <div class="main">
             <div class="club-requests section">
                 <h2>Club Requests</h2>
-                <a href="#" class="button Review">Review</a>
-                <div class="requests">
-                    <div class="request">
-
-                    </div>
-                </div>
+                <button class="button Review">Review</button>
+                <div class="requests"></div>
             </div>
             <div class="event-management section">
                 <h2>Event Management</h2>
-                <a href="#" class="button">Review</a>
-                <div class="events">
-                    <div class="event">
-                        <p>Event 1</p>
-                        <p>Location: Main Hall</p>
-                    </div>
-                    <div class="event">
-                        <p>Event 2</p>
-                        <p>Location: Club Room</p>
-                    </div>
-                </div>
+                <button class="button fetch-events">Fetch Events</button>
+                <div class="events"></div>
             </div>
 
-
-
-            <div class="club-activity section">
-                <h2>Club Activity</h2>
-                <div class="statistics">
-                    <div class="stat">
-                        <h3>Members</h3>
-                        <p>25</p>
-                    </div>
-                    <div class="stat">
-                        <h3>Events</h3>
-                        <p>10</p>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <footer>
-            © 2022 Club Management System. All Rights Reserved.
-        </footer>
+        <footer>© 2022 Club Management System. All Rights Reserved.</footer>
     </div>
-    
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-$(document).ready(function() {
-    $('.Review').click(function(event) {
-        event.preventDefault(); // Prevent default link behavior
-
-        // Make AJAX request to Flask backend to fetch club requests
-        $.ajax({
-            type: 'GET',
-            url: '/get_club_requests', // Ensure this route is set up in your Flask app
-            success: function(response) {
-                // Clear existing content in the requests container
-                $('.requests').empty();
-
-                // Append each fetched request to the requests container
-                response.forEach(function(request) {
-                    var requestHtml = `
-                        <div class="request">
-                            <p>Club Name: ${request.club_name}</p>
-                            <p>Description: ${request.club_description}</p>
-                            <p>Head Username: ${request.username}</p> <!-- Displaying the head's username -->
-                            <p>Status: ${request.status}</p>
-                            <button class="approve" data-request-id="${request.id}">Approve</button>
-                            <button class="deny" data-request-id="${request.id}">Deny</button>
-                        </div>`;
-                    $('.requests').append(requestHtml);
+        $(document).ready(function() {
+            $('.Review').click(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'GET',
+                    url: '/get_club_requests',
+                    success: function(response) {
+                        $('.requests').empty();
+                        response.forEach(function(request) {
+                            var requestHtml = `
+                                <div class="request">
+                                    <p>Club Name: ${request.club_name}</p>
+                                    <p>Description: ${request.club_description}</p>
+                                    <p>Head Username: ${request.username}</p>
+                                    <p>Status: ${request.status}</p>
+                                    <button class="approve" data-request-id="${request.id}">Approve</button>
+                                    <button class="deny" data-request-id="${request.id}">Deny</button>
+                                </div>`;
+                            $('.requests').append(requestHtml);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching club requests: ' + error);
+                    }
                 });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching club requests: ' + error);
-            }
-        });
-    });
+            });
 
-            // Handle click event for approve button
             $(document).on('click', '.approve', function() {
                 var requestId = $(this).data('request-id');
-
-                // Make AJAX request to approve club request
                 $.ajax({
                     type: 'POST',
                     url: '/approve_request',
                     data: JSON.stringify({ request_id: requestId }),
                     contentType: 'application/json',
                     success: function(response) {
-                        // Handle success response
                         console.log(response);
                     },
                     error: function(xhr, status, error) {
@@ -207,22 +162,44 @@ $(document).ready(function() {
                 });
             });
 
-            // Handle click event for deny button
             $(document).on('click', '.deny', function() {
                 var requestId = $(this).data('request-id');
-
-                // Make AJAX request to deny club request
                 $.ajax({
                     type: 'POST',
                     url: '/deny_request',
                     data: JSON.stringify({ request_id: requestId }),
                     contentType: 'application/json',
                     success: function(response) {
-                        // Handle success response
                         console.log(response);
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
+                    }
+                });
+            });
+
+            $('.fetch-events').click(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'GET',
+                    url: '/get_event_requests',
+                    success: function(response) {
+                        $('.events').empty();
+                        response.forEach(function(event) {
+                            var eventHtml = `
+                                <div class="event">
+                                    <p>Event Name: ${event.name}</p>
+                                    <p>Description: ${event.description}</p>
+                                    <p>Date: ${event.date}</p>
+                                    <p>Club: ${event.club_name}</p>
+                                    <button class="approve-event" data-event-id="${event.id}">Approve</button>
+                                    <button class="deny-event" data-event-id="${event.id}">Deny</button>
+                                </div>`;
+                            $('.events').append(eventHtml);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching event requests: ' + error);
                     }
                 });
             });

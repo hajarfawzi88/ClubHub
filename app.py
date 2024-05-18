@@ -1,19 +1,21 @@
-from flask import Flask , render_template,url_for,request ,jsonify,redirect,session
+from flask import Flask , render_template,url_for,request ,jsonify,redirect,session,flash
 from math import sin,cos,tan,sqrt,pow
 import bcrypt  # Secure hashing library
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import re
 
+import logging
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DB2.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DB4.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 app.secret_key = '123'
 
 
-
+logging.basicConfig(level=logging.DEBUG)
 # Association table for many-to-many relationship between User and Club
 club_members = db.Table('club_members',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
@@ -95,6 +97,20 @@ class Event(db.Model):
     date = db.Column(db.Date, nullable=False)
     club_id = db.Column(db.Integer, db.ForeignKey('club.id'), nullable=False)
     club = db.relationship('Club', backref=db.backref('events', lazy=True))
+    location=db.Column(db.String(100), nullable=False)
+    expected_members = db.Column(db.Integer, nullable=False)
+
+class EventRequest(db.Model):
+    __tablename__ = 'event_request'
+    id = db.Column(db.Integer, primary_key=True)
+    event_name = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(255), nullable=False)
+    expected_members = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    status = db.Column(db.String(20), default='pending', nullable=False)
+    club_id = db.Column(db.Integer, db.ForeignKey('club.id'), nullable=False)
+    club = db.relationship('Club', backref=db.backref('event_requests', lazy=True))
+
 
 class Announcement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -234,6 +250,39 @@ def isValidEmail(email):
 def isValidPassword(password):
     password_regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
     return re.match(password_regex, password) is not None
+
+
+
+
+
+
+
+
+@app.route('/Editclub/<int:club_id>', methods=['GET', 'POST'])
+def Editclub(club_id):
+    club = Club.query.get(club_id)
+    if not club:
+        return 'Club not found', 404
+
+    if 'user_id' not in session or club.head_id != session['user_id']:
+        return 'Unauthorized', 403
+
+    if request.method == 'GET':
+        return render_template("Editclub.html", club=club)
+
+    elif request.method == 'POST':
+        data = request.form  # Use form data instead of JSON
+        club.name = data.get('name', club.name)
+        club.description = data.get('description', club.description)
+        club.image_url = data.get('image_url', club.image_url)
+        
+        db.session.commit()
+        return redirect(url_for('newclub', club_id=club_id))
+
+
+
+
+
 
 
 @app.route('/get_club_requests', methods=['GET'])
@@ -380,8 +429,101 @@ def deny_request():
     else:
         return jsonify({'success': False, 'message': 'Club request not found'}), 404
 
+@app.route('/RequestEvents', methods=['GET', 'POST'])
+def RequestEvents():
+    print("Entering RequestEvents route")
+    user_id = session.get('user_id')
+    if not user_id:
+        print("No user in session")
+        return redirect('/login')
+
+    user = User.query.get(user_id)
+    if not user:
+        print("User not found")
+        return redirect('/login')
+
+    if request.method == 'POST':
+        # Handle form submission for creating a new event
+        eventName = request.form.get('eventName')
+        location = request.form.get('location')
+        expectedMembers = request.form.get('expectedMembers')
+        date = request.form.get('date')
+        
+        if not all([eventName, location, expectedMembers, date]):
+            flash('All fields are required.', 'error')
+            return redirect(url_for('RequestEvents'))
+        
+        # Convert date from string to datetime object
+        try:
+            date = datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            flash('Invalid date format.', 'error')
+            return redirect(url_for('RequestEvents'))
+        
+        # Assuming you have a method to add events
+        new_event = Event(name=eventName, location=location, date=date, expected_members=expectedMembers)
+        db.session.add(new_event)
+        db.session.commit()
+        flash('Event created successfully!', 'success')
+
+    # Proceed with the GET request handling
+    clubs_info = []
+    member_clubs = user.clubs
+    headed_clubs = Club.query.filter_by(head_id=user_id).all()
+    all_clubs = set(member_clubs + headed_clubs)
+
+    for club in all_clubs:
+        role = "Head" if club in headed_clubs else "Member"
+        events = [event for event in club.events]
+        club_details = {
+            'club': club,
+            'role': role,
+            'events': events
+        }
+        clubs_info.append(club_details)
+
+    return render_template("RequestEvents.html", user=user, clubs_info=clubs_info,events=events)
 
 
+@app.route('/get_event_requests', methods=['GET'])
+def get_event_requests():
+    print("Fetching event requests...")
+    event_requests = EventRequest.query.all()
+    serialized_requests = [{
+        'id': request.id,
+        'name': request.event_name,
+        'description': request.location,  # Adjust description to match your data
+        'date': request.date.strftime("%Y-%m-%d"),
+        'expected_members': request.expected_members,
+        'status': request.status,
+        'club_name': request.club.name
+    } for request in event_requests]
+    return jsonify(serialized_requests)
+
+from datetime import datetime
+
+@app.route('/submit_event_request', methods=['POST'])
+def submit_event_request():
+    data = request.get_json()
+    eventName = data.get('eventName')
+    location = data.get('location')
+    expectedMembers = data.get('expectedMembers')
+    description = data.get('description')
+    eventDate = data.get('date')
+
+    try:
+        # Update the date format here to match MM/DD/YYYY
+        date = datetime.strptime(eventDate, '%m/%d/%Y')
+    except ValueError as e:
+        # If there's an error in date conversion, return an error message
+        return jsonify({'message': 'Invalid date format', 'error': str(e)}), 400
+
+    # If date parsing is successful, proceed with creating the event
+    new_event = Event(name=eventName, location=location, date=date, expected_members=expectedMembers, description=description)
+    db.session.add(new_event)
+    db.session.commit()
+
+    return jsonify({'message': 'Your event request has been received and is pending approval.'})
 
 @app.route("/service")
 def service():
@@ -421,39 +563,23 @@ def olduser():
 @app.route("/newclub/<int:club_id>")
 def newclub(club_id):
     club = Club.query.get(club_id)
-    
+    if not club:
+        return render_template('newclub.html', club=None, message="Club not found")
 
-    # Check if the club exists
-    if club:
-        # Access the head of the club
-        head_user = club.club_head
+    head_email = club.head.email if club.head else "No head assigned"
+    user_joined_club = False
+    is_club_head = False
 
-        # Check if the head user exists
-        if head_user:
-            # Extract the email of the head
-            head_email = head_user.email
-        else:
-            # Handle case where head user does not exist
-            head_email = "No head assigned"
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = User.query.get(user_id)
+        if user:
+            is_club_head = (club.head_id == user_id)
+            user_joined_club = user in club.members
 
-        # Check if the user has joined the club
-        user_joined_club = False
-        is_club_head = False  # New condition for checking if the user is the head of the club
-        if 'user_id' in session:
-            user_id = session['user_id']
-            user = User.query.get(user_id)
-            if user:
-                # Check if the user is the head of the club
-                if club.head == user_id:
-                    is_club_head = True
-                # Check if the user has joined the club
-                if club in user.joined_clubs:
-                    user_joined_club = True
+    can_view_details = is_club_head or user_joined_club
 
-        return render_template('newclub.html', club=club, head_email=head_email, user_joined_club=user_joined_club, is_club_head=is_club_head)
-    else:
-        # Handle case where club does not exist
-        return render_template('newclub.html', club=None, head_email="Club not found", user_joined_club=False, is_club_head=False)
+    return render_template('newclub.html', club=club, head_email=head_email, can_view_details=can_view_details, is_club_head=is_club_head)
 
 @app.route("/student")
 def student():
