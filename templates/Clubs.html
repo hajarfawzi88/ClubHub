@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #9b1e1e;
+        }
+        .header {
+            background-color: #95abcc;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+        .search-bar input {
+            padding: 8px;
+            margin-right: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info span {
+            margin-right: 10px;
+        }
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background: #95abcc;
+            margin-top: 20px;
+        }
+        .left-column {
+            width: 30%;
+            padding-right: 60px;
+            padding: 200px;
+        }
+        .right-column {
+            width: 70%;
+            display: flex;
+            flex-direction: column; /* Changed to column to stack cards vertically */
+        }
+        .club-card {
+            width: 80%;
+            background: #95abcc;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .event-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 8px 16px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #95abcc;
+            margin-top: 20px;
+        }
+        .background-container {
+            background-image: url('https://github.com/hajarfawzi88/ClubHub/blob/main/Clubsreal.jpeg?raw=true'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            height: 1000px; /* Adjust the height as needed */
+            opacity: 1;
+            position: relative;
+        }
+        .dark-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(32, 39, 59, 0.9); /* Adjust the alpha value for darkness */
+    }
+    .navbar-brand img {
+                border-radius: 80%; /* Circular logo */
+            }
+    .navbar-custom {
+    background-color: #95abcc; /* Example: blue */
+    color: rgb(2, 2, 2); /* Ensures text is readable on a dark background */
+}
+.Text{
+                font-size: 20px; 
+                color: black;
+            }
+    </style>
+</head>
+<body>
+    <div class="header">
+
+        <a class="navbar-brand" href="#">
+            <img src="https://github.com/hajarfawzi88/ClubHub/blob/Hajar/image.png?raw=true" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
+            <div class="Text">
+                ClubHub 
+            </div>
+        </a>
+
+
+        
+        <div class="search-bar">
+            <input type="text" placeholder="Discover Clubs">
+            <button>Search</button>
+        </div>
+        <div class="user-info">
+            <span class="navbar-text">
+                {{ user.username if user else 'Guest' }}
+            </span>
+            <button id="logout-button"class="btn btn-primary">Logout</button>
+        </div>
+    </div>
+        <div class="background-container">
+            <div class="dark-overlay">
+    <div class="main-content">
+        <div class="left-column">
+            <h2>Joined Clubs</h2>
+            <p>Stay updated with club activities</p>
+        </div>
+        <div class="right-column">
+            <div class="club-card">
+                <div class="club-card">
+                    <h2 style="color:#ffffff" >Your Clubs</h2>
+                    {% for club in clubs %}
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ club.name }}</h5>
+                            <p class="card-text">{{ club.description }}</p>
+                            
+                        </div>
+                    </div>
+                    {% endfor %}
+                <a href="#" class="event-button">View All Events</a>
+        </div>
+    </div>
+</div>
+</div>
+<script>         
+   document.getElementById('logout-button').addEventListener('click', function() {
+    window.location.href = '/'; // Redirects the user to the homepage
+});
+</script>
+
+    <footer>
+        <p>ClubHub - All rights reserved</p>
+    </footer>
+</body>
+</html>

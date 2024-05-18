@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clubs Organizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+        }
+        .header {
+            background-color: #30b7cf;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+        .search-bar input {
+            padding: 8px;
+            margin-right: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info span {
+            margin-right: 10px;
+        }
+        .main-content {
+            padding: 20px;
+            background: #ffffff;
+            margin-top: 20px;
+        }
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 200px;
+            margin-top: 200px;
+        }   
+        .button {
+            display: inline-block;
+            padding: 20px 30px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 100px;
+        }
+        .featured-clubs, .discover-clubs {
+            flex: 1;
+            margin: 100px;
+        }
+        .clubs-cards {
+            display: flex;
+            flex: 2;
+            justify-content: space-around;
+        }
+        .card {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 30%;
+            margin: 10px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    
+    <div class="header">
+        <h1>Clubs Organizer</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Discover Clubs">
+            <button>Search</button>
+        </div>
+        <div class="user-info">
+            <span class="navbar-text">
+                {{ user.username if user else 'Guest' }}
+            </span>
+            <button id="view-clubs-button"class="btn btn-primary">View Clubs Joined</button> <!-- New Button -->
+            <button id="logout-button"class="btn btn-primary">Logout</button>
+        </div>
+    </div>
+    
+
+  
+    <div class="main-content">
+        <div class="welcome-section">
+            <h1>Welcome! Explore Clubs</h1>
+            <p>Find clubs based on your interests</p>
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="clubs-cards">
+                
+                {% for club in clubs %}
+                <div class="card">
+                    <h3>{{ club.name }}</h3>
+                    <p>{{ club.description }}</p>
+                    <button class="btn btn-primary view-club-details" data-club-id="{{ club.id }}">View Details</button>
+                </div>
+                {% endfor %}
+                
+            </div>
+
+            
+    </div>
+
+    <footer>
+        <p>Clubs Organizer - All rights reserved</p>
+    </footer>
+    <script>
+        document.getElementById('view-clubs-button').addEventListener('click', function() {
+            window.location.href = '/Clubs'; // Directs the user to the Clubs page
+        });
+        document.getElementById('logout-button').addEventListener('click', function() {
+        window.location.href = '/'; // Redirects the user to the homepage
+    });
+  var viewClubButtons = document.querySelectorAll('.view-club-details');
+
+// Add event listener to each button
+viewClubButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        // Extract the club ID from the data-club-id attribute
+        var clubId = this.getAttribute('data-club-id');
+        // Construct the URL with the club ID and redirect
+        window.location.href = '/newclub/' + clubId;
+    });
+});
+
+    </script>
+    
+</body>
+</html>

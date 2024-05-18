@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Club</title>
+    <style>
+        body, h1, h2, h3, p {
+            margin: 0;
+            padding: 100;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background: #52dbc4;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 10;
+        }
+        .club-info, .club-join, .events, .president-info {
+            padding: 20px;
+            background: white;
+            border: 2px solid #ddd;
+            margin-top: 20px;
+        }
+        .club-info div, .events div {
+            padding: 20px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 30%; /* Adjust button to full width */
+        }
+        input[type="text"], input[type="email"] {
+            padding: 10px;
+            margin: 5px 0 10px 0;
+            width: 100%; /* Adjust input to full width */
+            box-sizing: border-box; /* Include padding and border in width */
+        }
+        .discussion-board, .events, .club-join {
+            padding: 20px;
+            background: white;
+            border: 2px solid #ddd;
+            margin-top: 20px;
+        }
+        .club-join div {
+            align-items: flex-start;
+            padding: 10px;
+            width: 100%; /* Full width for inputs and button */
+            margin-bottom: 10px;
+        }
+        .discussion-topic {
+            padding: 20px;
+            background: white;
+            border: 2px solid #ddd;
+            margin-top: 20px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ club.name }}</h1>
+        <p>{{ club.description }}</p>
+    </div>
+    
+    <div class="president-info">
+        <div>
+            <h2>President: {{ head_email }}</h2>
+            <p>Contact for more info</p>
+        </div>
+        <button class="button">Contact</button>
+    </div>
+    
+    <div class="club-info">
+        <h3>Club Contact</h3>
+        <div>
+            <p>Email: not Defined Yet</p>
+            <p>Website: not Defined Yet</p>
+        </div>
+    </div>
+    
+    
+    <h3 class="discussion-board"> Discussion Board</h3>
+    {% for topic in club.discussion_topics %}
+    <div class="discussion-topic">
+        <h4>{{ topic.title }}</h4>
+        <p>{{ topic.description }}</p>
+    </div>
+    {% endfor %}
+    
+    <div class="events">
+        <div>
+            <h3>Upcoming Events</h3>
+        </div>
+        {% for event in club.events %}
+        <div>
+            <h4>{{ event.title }}</h4>
+            <p>Date: {{ event.date }}</p>
+            <button class="button">RSVP</button>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="club-join">
+        {% if not user_joined_club or not is_club_head %}
+            <div><input type="text" placeholder="Your Name"></div>
+            <div><input type="email" placeholder="Your Email"></div>
+            <div><input type="text" placeholder="Year of Study"></div>
+            <button class="button">Join Club</button>
+        {% else %}
+            <p>JOINED</p>
+        {% endif %}
+    </div>
+    
+    
+    
+    <footer>
+        <p>Clubs Organizer - All rights reserved</p>
+    </footer>
+    
+</body>
+</html>
