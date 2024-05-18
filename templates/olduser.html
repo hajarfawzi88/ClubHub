@@ -102,14 +102,25 @@
         <div class="container content">
             <section class="clubs">
                 <h2 style="color:#ffffff" >Your Clubs</h2>
-                {% for club in clubs %}
+                {% for club_info in clubs %}
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ club.name }}</h5>
-                        <p class="card-text">{{ club.description }}</p>
+                        <h5 class="card-title">{{ club_info.club.name }}</h5>
+                        <p class="card-text">{{ club_info.club.description }}</p>
+                        <p><strong>Role:</strong> {{ club_info.role }}</p>
+                        <!-- Conditional rendering based on role -->
+                        {% if club_info.role == "Head" %}
+                            <button class="btn btn-info">Add Task</button>
+                            <button class="btn btn-info">Request Event</button>
+                            <button class="btn btn-info">Add Announcement</button>
+                        {% else %}
+                            <button class="btn btn-secondary">View Tasks</button>
+                        {% endif %}
+                        <a href="#" class="btn btn-primary">View Details</a>
                     </div>
                 </div>
-                {% endfor %}
+                {% endfor %}    
+
             </section>
                 <a href="#" id="view-all-joined-clubs" class="btn btn-primary">View All Joined Clubs</a>
 
@@ -170,6 +181,9 @@
                 window.location.href = '/Events';  // Directs to the student or any appropriate page
             });
             document.getElementById('view-all-announcements').addEventListener('click', function() {
+                window.location.href = '/Announcements';  // Directs to the student or any appropriate page
+            });
+            document.getElementById('Club details').addEventListener('click', function() {
                 window.location.href = '/Announcements';  // Directs to the student or any appropriate page
             });
             document.getElementById('logout-button').addEventListener('click', function() {

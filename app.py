@@ -7,7 +7,7 @@ import re
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DB.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DB2.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 app.secret_key = '123'
@@ -238,20 +238,14 @@ def isValidPassword(password):
 
 @app.route('/get_club_requests', methods=['GET'])
 def get_club_requests():
-    # Fetch all club requests from the database
-    requests = ClubRequest.query.all()
-
-    # Serialize the requests to JSON format
+    requests = ClubRequest.query.all()  # Fetch all requests (adjust according to your data model)
     serialized_requests = [{
-        'id': request.id,
-        'user_id': request.user_id,
-        'username': request.user.username,
-        'club_name': request.club_name,
-        'club_description': request.club_description,
-        'club_image_url': request.club_image_url,
-        'status': request.status
-    } for request in requests]
-
+        'id': req.id,
+        'club_name': req.club_name,
+        'club_description': req.club_description,
+        'username': req.user.username,  # Assuming each request is associated with a user
+        'status': req.status
+    } for req in requests]
     return jsonify(serialized_requests)
 
 
@@ -397,7 +391,6 @@ def service():
 def About():
     return render_template("About.html")
 
-
 @app.route("/olduser")
 def olduser():
     print("Entering olduser route")
@@ -407,14 +400,15 @@ def olduser():
         if user:
             print(f"Logged in as {user.username}")
 
-            # Fetch clubs where the user is a member
-            member_clubs = user.clubs  # Assuming this fetches clubs where the user is a member through the many-to-many relationship
-
-            # Fetch clubs where the user is the head
+            # Fetch clubs where the user is a member and head
+            clubs = []
+            member_clubs = user.clubs
             headed_clubs = Club.query.filter_by(head_id=user_id).all()
 
-            # Combine both lists, ensuring no duplicates
-            clubs = list(set(member_clubs + headed_clubs))
+            # Create a list of dictionaries including the club and the user's role
+            for club in set(member_clubs + headed_clubs):
+                role = "Head" if club in headed_clubs else "Member"
+                clubs.append({'club': club, 'role': role})
 
             return render_template("olduser.html", user=user, clubs=clubs)
         else:
@@ -423,7 +417,6 @@ def olduser():
         print("No user in session")
 
     return redirect('/')
-
 
 @app.route("/newclub/<int:club_id>")
 def newclub(club_id):
@@ -464,14 +457,30 @@ def newclub(club_id):
 
 @app.route("/student")
 def student():
-    if 'user_id' not in session:
-        return redirect('/login')
-    user_id = session['user_id']
-    user = User.query.get(user_id)
-    if not user:
-        return 'User not found', 404
-    clubs = [membership.club for membership in user.memberships]
-    return render_template('student.html', clubs=clubs)
+    print("Entering olduser route")
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = User.query.get(user_id)
+        if user:
+            print(f"Logged in as {user.username}")
+
+            # Fetch clubs where the user is a member
+            member_clubs = user.clubs  # Assuming this fetches clubs where the user is a member through the many-to-many relationship
+
+            # Fetch clubs where the user is the head
+            headed_clubs = Club.query.filter_by(head_id=user_id).all()
+
+            # Combine both lists, ensuring no duplicates
+            clubs = list(set(member_clubs + headed_clubs))
+
+            return render_template("student.html", user=user, clubs=clubs)
+        else:
+            print("User not found")
+    else:
+        print("No user in session")
+
+    return redirect('/')
+
 
 @app.route("/clubmanager")
 def clubmanager():
