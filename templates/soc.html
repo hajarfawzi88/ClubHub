@@ -100,6 +100,8 @@
         </div>
         <button class="edit-button">Edit Club Info</button>
         <button class="create-club-button">Create Club</button> <!-- New button for creating a club -->
+        <button id="logout-button"class="btn btn-primary">Logout</button>
+                    
     </div>
     
     <div class="container">
@@ -177,6 +179,7 @@
                                 <div class="request">
                                     <p>Club Name: ${request.club_name}</p>
                                     <p>Description: ${request.club_description}</p>
+                                    <p>head username: ${request.username}</p>
                                     <p>Status: ${request.status}</p>
                                 `;
 
@@ -234,6 +237,9 @@
                 });
             });
         });
+        document.getElementById('logout-button').addEventListener('click', function() {
+                window.location.href = '/logout'; // Redirects the user to the homepage
+    });
     </script>
 
 </body>

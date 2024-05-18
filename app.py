@@ -247,6 +247,7 @@ def get_club_requests():
     serialized_requests = [{
         'id': request.id,
         'user_id': request.user_id,
+        'username': request.user.username,
         'club_name': request.club_name,
         'club_description': request.club_description,
         'club_image_url': request.club_image_url,
@@ -262,7 +263,7 @@ def get_club_requests():
 @app.route("/addnewclub", methods=['GET', 'POST'])
 def addnewclub():
     if request.method == 'GET':
-        print(session)
+        
         if 'user_id' in session:
             user_id = session['user_id']
             user = User.query.get(user_id)
@@ -276,11 +277,13 @@ def addnewclub():
         if 'user_id' in session:
             user_id = session['user_id']
             user = User.query.get(user_id)
+
             
 
             if not user:
                 return jsonify({'success': False, 'errors': ['User not found']}), 404
         if request.is_json:
+            print(user_id)
             data = request.get_json()
             head_email = data.get('head_email')
             club_name = data.get('name')
@@ -312,8 +315,10 @@ def addnewclub():
                 return jsonify({'success': True, 'message': 'Club request submitted successfully'}), 201
             except Exception as e:
                 db.session.rollback()
+                print(user_id)
                 return jsonify({'success': False, 'message': str(e)}), 500
         else:
+            
             return jsonify({'success': False, 'message': 'Request must be JSON'}), 400
 
 #########################
@@ -328,6 +333,7 @@ def approve_request():
     if not request_data:
         return jsonify({'success': False, 'message': 'Club request not found'}), 404
 
+    # Check if a club with the same name already exists
     existing_club = Club.query.filter_by(name=request_data.club_name).first()
     if existing_club:
         db.session.delete(request_data)  # Delete the request even if club exists
@@ -335,20 +341,33 @@ def approve_request():
         return jsonify({'success': False, 'message': 'A club with this name already exists'}), 409
 
     try:
+        # Verify that the user who will be the head exists
+        head_user = User.query.get(request_data.user_id)
+        if not head_user:
+            db.session.delete(request_data)  # Optional: delete request if head user not found
+            db.session.commit()
+            return jsonify({'success': False, 'message': 'Head user not found'}), 404
+
+        # Create a new club
         new_club = Club(
-            name=request_data.club_name, 
-            description=request_data.club_description, 
-            image_url=request_data.club_image_url,  # Make sure this is included in your Club model
-            head_id=request_data.user_id
-            
+            name=request_data.club_name,
+            description=request_data.club_description,
+            image_url=request_data.club_image_url,  # Ensure this column exists in your Club model
+            head_id=head_user.id  # Use the ID of the head user found
         )
-    
         db.session.add(new_club)
         db.session.delete(request_data)  # Delete the request upon successful creation of the club
         db.session.commit()
-        return jsonify({'success': True, 'message': 'Club request approved and club created successfully'}), 200
+
+        # Debugging outputs
+        print(f"Username in session: {session.get('username', 'Unknown')}")
+        print(f"Head ID saved in club: {new_club.head_id}")
+        print(f"Head Username: {head_user.username}")
+
+        return jsonify({'success': True, 'message': 'Club request approved and club created successfully, head assigned'}), 200
     except Exception as e:
         db.session.rollback()
+        print(f"Error during club creation: {str(e)}")
         return jsonify({'success': False, 'message': str(e)}), 500
 
 
@@ -383,17 +402,30 @@ def About():
 
 @app.route("/olduser")
 def olduser():
-    print("hi")
-    if 'user_id' in session:  # Check if user is logged in
+    print("Entering olduser route")
+    if 'user_id' in session:
         user_id = session['user_id']
         user = User.query.get(user_id)
-        print(user)
         if user:
-            print("not heree")
-            # Query to find all clubs where the user is a member
-            clubs = user.clubs  # Access the clubs through the relationship defined in the User model
+            print(f"Logged in as {user.username}")
+
+            # Fetch clubs where the user is a member
+            member_clubs = user.clubs  # Assuming this fetches clubs where the user is a member through the many-to-many relationship
+
+            # Fetch clubs where the user is the head
+            headed_clubs = Club.query.filter_by(head_id=user_id).all()
+
+            # Combine both lists, ensuring no duplicates
+            clubs = list(set(member_clubs + headed_clubs))
+
             return render_template("olduser.html", user=user, clubs=clubs)
+        else:
+            print("User not found")
+    else:
+        print("No user in session")
+
     return redirect('/')
+
 
 @app.route("/newclub/<int:club_id>")
 def newclub(club_id):
@@ -459,25 +491,44 @@ def clubmanager():
 
 @app.route("/Clubs")
 def Clubs():
-    print("hiiii")
-    if 'user_id' in session:  # Check if user is logged in
+    print("Entering club route")
+    if 'user_id' in session:
         user_id = session['user_id']
         user = User.query.get(user_id)
-        print(user)
-        print("User ID:", user_id)
-        print("User:", user)
-       
         if user:
-            print("not heree")
-            # Query to find all clubs where the user is a member
-            clubs = user.clubs  # Access the clubs through the relationship defined in the User model
-            print("Clubs:", clubs)
+            print(f"Logged in as {user.username}")
+
+            # Fetch clubs where the user is a member
+            member_clubs = user.clubs  # Assuming this fetches clubs where the user is a member through the many-to-many relationship
+
+            # Fetch clubs where the user is the head
+            headed_clubs = Club.query.filter_by(head_id=user_id).all()
+
+            # Combine both lists, ensuring no duplicates
+            clubs = list(set(member_clubs + headed_clubs))
+
             return render_template("Clubs.html", user=user, clubs=clubs)
+        else:
+            print("User not found")
+    else:
+        print("No user in session")
+
     return redirect('/')
 
 @app.route("/soc")
 def soc():
-    return render_template("soc.html")
+    if 'user_id' in session:  # Check if user is logged in
+        user_id = session['user_id']
+        user = User.query.get(user_id)
+        if user:
+            # Correcting the filter to use head_id
+            clubs = Club.query.filter(Club.head_id == user_id).all()
+            print(user.username)
+            return render_template("soc.html", user=user, clubs=clubs)
+        else:
+            return "User not found", 404  # It's good to handle the case where the user does not exist
+    return redirect('/')
+    
 
 
 
@@ -616,7 +667,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)
+    session.clear()
     return redirect('/')
 
 ############################    
