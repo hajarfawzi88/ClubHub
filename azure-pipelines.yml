@@ -1,0 +1,52 @@
+trigger:
+- main  # Adjust this to your main branch name
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  imageName: 'clubhub'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+
+- script: |
+    python -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- task: DockerInstaller@0
+  displayName: 'Install Docker'
+
+- script: |
+    docker build -t $(imageName) .
+    docker tag $(imageName) clubhub.azurecr.io/$(imageName):$(Build.BuildId)
+    echo $(DOCKER_PASSWORD) | docker login clubhub.azurecr.io -u $(DOCKER_USERNAME) --password-stdin
+    docker push clubhub.azurecr.io/$(imageName):$(Build.BuildId)
+  env:
+    DOCKER_USERNAME: $(DOCKER_USERNAME)
+    DOCKER_PASSWORD: $(DOCKER_PASSWORD)
+  displayName: 'Build and push Docker image'
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: '<Your Azure Subscription>'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az acr repository list --name clubhub --output table
+      az acr repository show-tags --name clubhub --repository $(imageName)
+  displayName: 'Verify Docker image in ACR'
+
+- task: AzureWebAppContainer@1
+  inputs:
+    azureSubscription: '<Your Azure Subscription>'
+    appName: '<Your Azure Web App Name>'
+    containers: |
+      clubhub.azurecr.io/$(imageName):$(Build.BuildId)
+    imageSource: 'Azure Container Registry'
+
