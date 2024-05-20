@@ -5,14 +5,17 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-- group: MyVariableGroup
+  imageName: 'clubhub'
+  acrLoginServer: 'flaskclubs.azurecr.io'
+  azureServiceConnection: 'ClubHubConnection'
+  azureWebAppName: 'flaskclubsapp'
+  resourceGroupName: 'ClubHubResource'
+  dockerUsername: 'flaskclubs'
 
 stages:
 - stage: Build
   jobs:
   - job: Build
-    pool:
-      vmImage: 'ubuntu-latest'
     steps:
     - task: UsePythonVersion@0
       inputs:
@@ -25,24 +28,30 @@ stages:
       displayName: 'Install dependencies'
 
     - script: |
-        python -m pytest tests/
-      displayName: 'Run tests'
+        docker build -t $(imageName) .
+        docker tag $(imageName) $(acrLoginServer)/$(imageName):$(Build.BuildId)
+        echo $(dockerPassword) | docker login $(acrLoginServer) -u $(dockerUsername) --password-stdin
+        docker push $(acrLoginServer)/$(imageName):$(Build.BuildId)
+      env:
+        dockerUsername: $(dockerUsername)
+        dockerPassword: $(dockerPassword)
+      displayName: 'Build and push Docker image'
 
 - stage: Deploy
   jobs:
-  - deployment: DeployToStaging
-    environment: staging
+  - deployment: DeployToWebApp
+    environment: 'production'
     pool:
       vmImage: 'ubuntu-latest'
     strategy:
       runOnce:
         deploy:
           steps:
-          - script: |
-              # Deploy to staging server
-              ssh $(staging_user)@$(staging_host) './deploy.sh'
-            displayName: 'Deploy to Staging'
-            env:
-              staging_host: $(staging_host)
-              staging_user: $(staging_user)
-              staging_password: $(staging_password)
+          - task: AzureWebAppContainer@1
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              appName: $(azureWebAppName)
+              resourceGroupName: $(resourceGroupName)
+              containers: |
+                $(acrLoginServer)/$(imageName):$(Build.BuildId)
+            displayName: 'Deploy to Azure Web App'
