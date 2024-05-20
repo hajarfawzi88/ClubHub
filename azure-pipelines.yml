@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'Default'
 
 variables:
   imageName: 'clubhub'
@@ -42,7 +42,7 @@ stages:
   - deployment: DeployToWebApp
     environment: 'production'
     pool:
-      vmImage: 'ubuntu-latest'
+      name: 'Default'
     strategy:
       runOnce:
         deploy:
