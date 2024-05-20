@@ -20,6 +20,7 @@ stages:
     - script: |
         python --version
         python -m pip install --upgrade pip
+        pip --version
         pip install -r requirements.txt
       displayName: 'Install dependencies'
 
