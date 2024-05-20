@@ -34,7 +34,7 @@ steps:
 
 - task: AzureCLI@2
   inputs:
-    azureSubscription: '<Your Azure Subscription>'
+    azureSubscription: '<ClubHubConnection>'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
