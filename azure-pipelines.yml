@@ -1,0 +1,54 @@
+trigger:
+- main
+
+pool:
+  name: 'Default'
+
+variables:
+  imageName: 'clubhub'
+  acrLoginServer: 'flaskclubs.azurecr.io'
+  azureServiceConnection: 'ClubHubConnection'
+  azureWebAppName: 'flaskclubsapp'
+  resourceGroupName: 'ClubHubResource'
+  dockerUsername: 'flaskclubs'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+    - script: |
+        python --version
+        python -m pip install --upgrade pip
+        pip --version
+        pip install -r requirements.txt
+      displayName: 'Install dependencies'
+
+    - script: |
+        docker build -t $(imageName) .
+        docker tag $(imageName) $(acrLoginServer)/$(imageName):$(Build.BuildId)
+        echo $(dockerPassword) | docker login $(acrLoginServer) -u $(dockerUsername) --password-stdin
+        docker push $(acrLoginServer)/$(imageName):$(Build.BuildId)
+      env:
+        dockerUsername: $(dockerUsername)
+        dockerPassword: $(dockerPassword)
+      displayName: 'Build and push Docker image'
+
+- stage: Deploy
+  jobs:
+  - deployment: DeployToWebApp
+    environment: 'production'
+    pool:
+      name: 'Default'  # Replace with your self-hosted agent pool name
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebAppContainer@1
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              appName: $(azureWebAppName)
+              resourceGroupName: $(resourceGroupName)
+              containers: |
+                $(acrLoginServer)/$(imageName):$(Build.BuildId)
+            displayName: 'Deploy to Azure Web App'
