@@ -17,12 +17,8 @@ stages:
   jobs:
   - job: Build
     steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '3.8'
-      displayName: 'Use Python 3.8'
-
     - script: |
+        python --version
         python -m pip install --upgrade pip
         pip install -r requirements.txt
       displayName: 'Install dependencies'
@@ -42,7 +38,7 @@ stages:
   - deployment: DeployToWebApp
     environment: 'production'
     pool:
-      name: 'Default'
+      name: 'Default'  # Replace with your self-hosted agent pool name
     strategy:
       runOnce:
         deploy:
