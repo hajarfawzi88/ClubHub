@@ -5,7 +5,7 @@ pool:
   name: 'Default'
 
 variables:
-  imageName: 'clubhub'
+  imageName: 'flaskclubs'
   acrLoginServer: 'flaskclubs.azurecr.io'
   azureServiceConnection: 'ClubHubConnection'
   azureWebAppName: 'flaskclubsapp'
@@ -30,8 +30,7 @@ stages:
         echo $(dockerPassword) | docker login $(acrLoginServer) -u $(dockerUsername) --password-stdin
         docker push $(acrLoginServer)/$(imageName):$(Build.BuildId)
       env:
-        dockerUsername: $(dockerUsername)
-        dockerPassword: $(dockerPassword)
+        dockerPassword: $(DOCKER_PASSWORD)  # Ensure DOCKER_PASSWORD is a secret variable
       displayName: 'Build and push Docker image'
 
 - stage: Deploy
@@ -39,7 +38,7 @@ stages:
   - deployment: DeployToWebApp
     environment: 'production'
     pool:
-      name: 'Default'  # Replace with your self-hosted agent pool name
+      name: 'Default'
     strategy:
       runOnce:
         deploy:
